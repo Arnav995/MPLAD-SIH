@@ -8,7 +8,10 @@
     "start": "node dist/server.js",
     "esakshi:test": "tsx scripts/test-esakshi.ts",
     "esakshi:inspect": "tsx scripts/inspect-esakshi-response.ts",
-    "esakshi:parser": "tsx scripts/test-esakshi-parser.ts"
+    "esakshi:parser": "tsx scripts/test-esakshi-parser.ts",
+    "esakshi:works-completed":"tsx scripts/test-works-completed.ts",
+    "esakshi:inspect-works-completed": "tsx scripts/inspect-works-completed.ts",
+    "esakshi:parse-works-completed": "tsx scripts/test-works-completed-parser.ts"
   },
   "keywords": [],
   "author": "",
