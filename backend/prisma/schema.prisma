@@ -1,13 +1,448 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserRole {
+  MINISTRY
+  DISTRICT
+  MP
+}
+
+enum WorkLifecycleStatus {
+  RECOMMENDED
+  SANCTIONED
+  IN_PROGRESS
+  COMPLETED
+  UNKNOWN
+}
+
+enum RiskTier {
+  TIER_2
+  TIER_1
+  CLEAN
+}
+
+enum RiskSignalType {
+  COST_ANOMALY
+  DUPLICATE_OVERLAP
+  CROSS_STAGE_CONSISTENCY
+}
+
+enum RiskSeverity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum IngestionStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+  PARTIAL
+}
+
+
+// ============================================================
+// REFERENCE / IDENTITY
+// ============================================================
+
+model State {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  constituencies Constituency[]
+  works          Work[]
+
+  @@index([name])
+}
+
+model District {
+  id        Int      @id @default(autoincrement())
+  name      String
+  stateId   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  state State @relation(fields: [stateId], references: [id])
+
+  works       Work[]
+  districtUsers User[]
+
+  @@unique([stateId, name])
+  @@index([stateId])
+  @@index([name])
+}
+
+model Constituency {
+  id             Int      @id @default(autoincrement())
+  esakshiId      Int?     @unique
+  name           String
+  stateId        Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  state State @relation(fields: [stateId], references: [id])
+
+  MPs   MP[]
+  works Work[]
+
+  @@index([stateId])
+  @@index([name])
+}
+
+model MP {
+  id             Int      @id @default(autoincrement())
+  esakshiId      Int?     @unique
+  name           String
+  constituencyId Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  constituency Constituency? @relation(fields: [constituencyId], references: [id])
+
+  works      Work[]
+  mpUsers    User[]
+
+  @@index([name])
+  @@index([constituencyId])
+}
+
+model ImplementingAgency {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  works        Work[]
+  expenditures Expenditure[]
+}
+
+model Vendor {
+  id        Int      @id @default(autoincrement())
+  esakshiId Int?     @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  expenditures Expenditure[]
+
+  @@index([name])
+}
+
+
+// ============================================================
+// USER / AUTH FOUNDATION
+// ============================================================
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+
+  mpId       Int?
+  districtId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mp       MP?       @relation(fields: [mpId], references: [id])
+  district District? @relation(fields: [districtId], references: [id])
+
+  @@index([role])
+  @@index([mpId])
+  @@index([districtId])
+}
+
+
+// ============================================================
+// CORE WORK
+// ============================================================
+
+model Work {
+  id Int @id @default(autoincrement())
+
+  // eSAKSHI identifiers
+  recommendationDtlId BigInt  @unique
+  workId               BigInt? @unique
+
+  // Basic work information
+  activityName  String?
+  category      String?
+  description   String?
+
+  // Geographic / administrative ownership
+  stateId         Int?
+  districtId      Int?
+  constituencyId  Int?
+  mpId            Int?
+  implementingAgencyId Int?
+
+  // Source-level values
+  stateNameFromSource         String?
+  constituencyNameFromSource  String?
+  mpNameFromSource            String?
+  idaNameFromSource           String?
+
+  // Lifecycle
+  lifecycleStatus WorkLifecycleStatus @default(UNKNOWN)
+
+  // Dates
+  recommendationDate DateTime?
+  sanctionDate       DateTime?
+  completionDate     DateTime?
+
+  // Amounts
+  recommendedAmount Decimal? @db.Decimal(18, 2)
+  sanctionAmount    Decimal? @db.Decimal(18, 2)
+  actualAmount      Decimal? @db.Decimal(18, 2)
+
+  // Additional source fields
+  letterNo String?
+  flag     Int?
+  averageRating Decimal? @db.Decimal(5, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  state             State?             @relation(fields: [stateId], references: [id])
+  district          District?          @relation(fields: [districtId], references: [id])
+  constituency      Constituency?      @relation(fields: [constituencyId], references: [id])
+  mp                MP?                @relation(fields: [mpId], references: [id])
+  implementingAgency ImplementingAgency? @relation(fields: [implementingAgencyId], references: [id])
+
+  expenditures Expenditure[]
+  reviews      Review[]
+  riskAssessment RiskAssessment?
+  riskSignals    RiskSignal[]
+
+  duplicateCandidatesA DuplicateCandidate[] @relation("DuplicateWorkA")
+  duplicateCandidatesB DuplicateCandidate[] @relation("DuplicateWorkB")
+
+  ingestionRecords RawRecord[]
+
+  @@index([recommendationDtlId])
+  @@index([workId])
+  @@index([stateId])
+  @@index([districtId])
+  @@index([constituencyId])
+  @@index([mpId])
+  @@index([lifecycleStatus])
+  @@index([sanctionDate])
+  @@index([completionDate])
+}
+
+
+// ============================================================
+// EXPENDITURE / PAYMENT
+// ============================================================
+
+model Expenditure {
+  id Int @id @default(autoincrement())
+
+  workId               Int
+  vendorId             Int?
+  implementingAgencyId Int?
+
+  amount Decimal? @db.Decimal(18, 2)
+  expenditureDate DateTime?
+  workStatus String?
+
+  // Preserve source values where useful
+  workRecommendationDtlId BigInt?
+  activityName String?
+  vendorNameFromSource String?
+  iaNameFromSource String?
+  constituencyFromSource String?
+  mpNameFromSource String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  work Work @relation(fields: [workId], references: [id])
+  vendor Vendor? @relation(fields: [vendorId], references: [id])
+  implementingAgency ImplementingAgency? @relation(fields: [implementingAgencyId], references: [id])
+
+  @@index([workId])
+  @@index([vendorId])
+  @@index([expenditureDate])
+  @@index([workRecommendationDtlId])
+}
+
+
+// ============================================================
+// REVIEWS
+// ============================================================
+
+model Review {
+  id Int @id @default(autoincrement())
+
+  esakshiReviewId BigInt? @unique
+
+  workId Int
+
+  rating Int?
+  detail String?
+
+  workRecommendationDtlId BigInt?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  work Work @relation(fields: [workId], references: [id])
+
+  @@index([workId])
+  @@index([workRecommendationDtlId])
+}
+
+
+// ============================================================
+// RISK ENGINE
+// ============================================================
+
+model RiskAssessment {
+  id Int @id @default(autoincrement())
+
+  workId Int @unique
+
+  riskIndex Decimal @db.Decimal(5, 2)
+  tier RiskTier
+
+  primaryAnchors Json?
+  explanation Json?
+
+  evaluatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  work Work @relation(fields: [workId], references: [id], onDelete: Cascade)
+
+  @@index([tier])
+  @@index([riskIndex])
+  @@index([evaluatedAt])
+}
+
+model RiskSignal {
+  id Int @id @default(autoincrement())
+
+  workId Int
+
+  type RiskSignalType
+  severity RiskSeverity
+
+  score Decimal? @db.Decimal(5, 2)
+
+  reason String?
+  evidence Json?
+
+  detectedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  work Work @relation(fields: [workId], references: [id], onDelete: Cascade)
+
+  @@index([workId])
+  @@index([type])
+  @@index([severity])
+}
+
+
+// ============================================================
+// DUPLICATE / OVERLAP CANDIDATES
+// ============================================================
+
+model DuplicateCandidate {
+  id Int @id @default(autoincrement())
+
+  workAId Int
+  workBId Int
+
+  textSimilarity Decimal? @db.Decimal(6, 5)
+  amountRatio    Decimal? @db.Decimal(10, 5)
+  daysApart      Int?
+  sameVendor     Boolean?
+
+  suspicionScore Decimal? @db.Decimal(5, 2)
+
+  humanReviewReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workA Work @relation("DuplicateWorkA", fields: [workAId], references: [id], onDelete: Cascade)
+  workB Work @relation("DuplicateWorkB", fields: [workBId], references: [id], onDelete: Cascade)
+
+  @@unique([workAId, workBId])
+  @@index([workAId])
+  @@index([workBId])
+  @@index([suspicionScore])
+}
+
+
+// ============================================================
+// INGESTION
+// ============================================================
+
+model IngestionRun {
+  id Int @id @default(autoincrement())
+
+  source String
+  reportName String
+  scope String?
+
+  status IngestionStatus
+
+  startedAt DateTime @default(now())
+  completedAt DateTime?
+
+  recordsReceived Int @default(0)
+  recordsInserted Int @default(0)
+  recordsUpdated Int @default(0)
+  recordsFailed Int @default(0)
+
+  errorMessage String?
+
+  rawRecords RawRecord[]
+
+  @@index([source])
+  @@index([reportName])
+  @@index([status])
+  @@index([startedAt])
+}
+
+model RawRecord {
+  id Int @id @default(autoincrement())
+
+  ingestionRunId Int
+  workId        Int?
+
+  source String
+  reportName String
+
+  sourceRecordId String?
+
+  payload Json
+
+  createdAt DateTime @default(now())
+
+  ingestionRun IngestionRun @relation(fields: [ingestionRunId], references: [id], onDelete: Cascade)
+  work         Work?        @relation(fields: [workId], references: [id], onDelete: SetNull)
+
+  @@index([ingestionRunId])
+  @@index([workId])
+  @@index([source])
+  @@index([reportName])
+  @@index([sourceRecordId])
 }
