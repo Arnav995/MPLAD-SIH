@@ -9,9 +9,11 @@
     "esakshi:test": "tsx scripts/test-esakshi.ts",
     "esakshi:inspect": "tsx scripts/inspect-esakshi-response.ts",
     "esakshi:parser": "tsx scripts/test-esakshi-parser.ts",
-    "esakshi:works-completed":"tsx scripts/test-works-completed.ts",
+    "esakshi:works-completed": "tsx scripts/test-works-completed.ts",
     "esakshi:inspect-works-completed": "tsx scripts/inspect-works-completed.ts",
-    "esakshi:parse-works-completed": "tsx scripts/test-works-completed-parser.ts"
+    "esakshi:parse-works-completed": "tsx scripts/test-works-completed-parser.ts",
+    "esakshi:inspect-report": "tsx scripts/inspect-esakshi-report.ts"
+
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,7 @@
     "typescript": "^7.0.2"
   },
   "dependencies": {
+    "@prisma/client": "^7.10.0",
     "axios": "^1.20.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"

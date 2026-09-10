@@ -1,3 +1,4 @@
+import "dotenv/config";
 export interface EsakshiReportConfig {
   requestKey: string;
   responseKey: string;
@@ -11,7 +12,7 @@ export const ESAKSHI_REPORTS = {
 
   worksRecommended: {
     requestKey: "Works Recommended",
-    responseKey: "Works Recommended",
+    responseKey: "Total Works Recommended",
   },
 
   worksSanctioned: {
@@ -27,6 +28,10 @@ export const ESAKSHI_REPORTS = {
   expenditure: {
     requestKey: "Expenditure on Completed and On-going Works as on Date",
     responseKey: "Expenditure",
+  },
+  reviews: {
+    requestKey: "Reviews",
+    responseKey: "Reviews",
   },
 } as const;
 
