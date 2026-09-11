@@ -1,7 +1,8 @@
 import "../src/config/env.js";
 
-import { prisma } from "../src/db/prisma.js";
 import { RiskSignalType } from "@prisma/client";
+
+import { prisma } from "../src/db/prisma.js";
 
 async function main() {
   console.log("\n=== TIER-2 SIGNAL INSPECTION ===\n");
@@ -42,17 +43,20 @@ async function main() {
     },
   });
 
-  const costWorkIds = new Set(costSignals.map((signal) => signal.workId));
+  const costWorkIds = new Set(
+    costSignals.map((signal) => signal.workId),
+  );
+
   const consistencyWorkIds = new Set(
     consistencySignals.map((signal) => signal.workId),
   );
 
-  const duplicateWithCost = duplicateSignals.filter((signal) =>
-    costWorkIds.has(signal.workId),
+  const duplicateWithCost = duplicateSignals.filter(
+    (signal) => costWorkIds.has(signal.workId),
   );
 
-  const duplicateWithConsistency = duplicateSignals.filter((signal) =>
-    consistencyWorkIds.has(signal.workId),
+  const duplicateWithConsistency = duplicateSignals.filter(
+    (signal) => consistencyWorkIds.has(signal.workId),
   );
 
   const allSignalWorkIds = new Set([
@@ -61,7 +65,9 @@ async function main() {
     ...consistencySignals.map((signal) => signal.workId),
   ]);
 
-  const worksWithMultipleTypes = [...allSignalWorkIds].filter((workId) => {
+  const worksWithMultipleTypes = [
+    ...allSignalWorkIds,
+  ].filter((workId) => {
     const hasDuplicate = duplicateSignals.some(
       (signal) => signal.workId === workId,
     );
@@ -74,14 +80,33 @@ async function main() {
       (signal) => signal.workId === workId,
     );
 
-    return [hasDuplicate, hasCost, hasConsistency].filter(Boolean).length >= 2;
+    return [
+      hasDuplicate,
+      hasCost,
+      hasConsistency,
+    ].filter(Boolean).length >= 2;
   });
 
-  console.log("Duplicate signals:", duplicateSignals.length);
-  console.log("Cost signals:", costSignals.length);
-  console.log("Consistency signals:", consistencySignals.length);
+  console.log(
+    "Duplicate signals:",
+    duplicateSignals.length,
+  );
 
-  console.log("\nDuplicate + Cost:", duplicateWithCost.length);
+  console.log(
+    "Cost signals:",
+    costSignals.length,
+  );
+
+  console.log(
+    "Consistency signals:",
+    consistencySignals.length,
+  );
+
+  console.log(
+    "\nDuplicate + Cost:",
+    duplicateWithCost.length,
+  );
+
   console.log(
     "Duplicate + Consistency:",
     duplicateWithConsistency.length,
@@ -92,45 +117,77 @@ async function main() {
     worksWithMultipleTypes.length,
   );
 
-  console.log("\nSample duplicate + cost works:");
-
-  console.table(
-    duplicateWithCost.slice(0, 20).map((signal) => ({
-      workId: signal.workId,
-      duplicateScore: signal.score.toString(),
-      duplicateSeverity: signal.severity,
-      costScore:
-        costSignals
-          .find((cost) => cost.workId === signal.workId)
-          ?.score.toString() ?? null,
-      costSeverity:
-        costSignals.find((cost) => cost.workId === signal.workId)
-          ?.severity ?? null,
-    })),
+  console.log(
+    "\nSample duplicate + cost works:",
   );
 
-  console.log("\nSample works with 2+ signal types:");
+  console.table(
+    duplicateWithCost
+      .slice(0, 20)
+      .map((signal) => {
+        const matchingCostSignal =
+          costSignals.find(
+            (cost) =>
+              cost.workId === signal.workId,
+          );
+
+        return {
+          workId: signal.workId,
+
+          duplicateScore:
+            signal.score?.toString() ?? null,
+
+          duplicateSeverity:
+            signal.severity,
+
+          costScore:
+            matchingCostSignal?.score?.toString() ??
+            null,
+
+          costSeverity:
+            matchingCostSignal?.severity ??
+            null,
+        };
+      }),
+  );
+
+  console.log(
+    "\nSample works with 2+ signal types:",
+  );
 
   console.table(
-    worksWithMultipleTypes.slice(0, 20).map((workId) => ({
-      workId,
-      duplicate: duplicateSignals.some(
-        (signal) => signal.workId === workId,
-      ),
-      cost: costSignals.some(
-        (signal) => signal.workId === workId,
-      ),
-      consistency: consistencySignals.some(
-        (signal) => signal.workId === workId,
-      ),
-    })),
+    worksWithMultipleTypes
+      .slice(0, 20)
+      .map((workId) => ({
+        workId,
+
+        duplicate: duplicateSignals.some(
+          (signal) =>
+            signal.workId === workId,
+        ),
+
+        cost: costSignals.some(
+          (signal) =>
+            signal.workId === workId,
+        ),
+
+        consistency:
+          consistencySignals.some(
+            (signal) =>
+              signal.workId === workId,
+          ),
+      })),
   );
 }
 
 main()
   .catch((error) => {
-    console.error("\nInspection failed:");
+    console.error(
+      "\nInspection failed:",
+    );
+
     console.error(error);
+
     process.exitCode = 1;
   })
   .finally(async () => {

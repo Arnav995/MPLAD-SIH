@@ -20,7 +20,8 @@
     "risk:inspect-cost": "tsx scripts/inspect-cost-data.ts",
     "risk:inspect-cost-distribution": "tsx scripts/inspect-cost-distribution.ts",
     "risk:consistency": "tsx scripts/run-consistency-detection.ts",
-    "risk:assessment": "tsx scripts/run-risk-assessment.ts"
+    "risk:assessment": "tsx scripts/run-risk-assessment.ts",
+    "risk:ml": "tsx scripts/run-ml-pipeline.ts"
   },
   "keywords": [],
   "author": "",

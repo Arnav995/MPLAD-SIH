@@ -33,11 +33,16 @@ export function toProjectListItem(
       consistencyScore: 0,
     };
 
-  const signalTypes = new Set(
-    project.riskSignals.map(
-      (signal) => signal.type,
-    ),
-  );
+  const explanation =
+    project.riskAssessment?.explanation;
+
+  const signalTypeCount =
+    explanation &&
+    typeof explanation === "object" &&
+    "signalTypeCount" in explanation &&
+    typeof explanation.signalTypeCount === "number"
+      ? explanation.signalTypeCount
+      : project.riskSignals.length;
 
   const riskSignals =
     project.riskSignals.map(
@@ -99,7 +104,7 @@ export function toProjectListItem(
       primaryAnchors,
 
     signal_type_count:
-      signalTypes.size,
+      signalTypeCount,
 
     risk_signals:
       riskSignals,
