@@ -25,10 +25,10 @@ export const ESAKSHI_REPORTS = {
     responseKey: "Total Works Completed",
   },
 
-  expenditure: {
-    requestKey: "Expenditure on Completed and On-going Works as on Date",
-    responseKey: "Expenditure",
-  },
+ expenditure: {
+  requestKey: "Expenditure on Completed and On-going Works as on Date",
+  responseKey: "Total Expenditure",
+},
   reviews: {
     requestKey: "Reviews",
     responseKey: "Reviews",
