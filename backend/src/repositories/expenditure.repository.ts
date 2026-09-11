@@ -85,3 +85,18 @@ export async function createExpenditure(data: {
     },
   });
 }
+export async function deleteExpendituresForRecommendations(
+  recommendationDtlIds: bigint[],
+) {
+  if (recommendationDtlIds.length === 0) {
+    return;
+  }
+
+  await prisma.expenditure.deleteMany({
+    where: {
+      workRecommendationDtlId: {
+        in: recommendationDtlIds,
+      },
+    },
+  });
+}

@@ -6,49 +6,75 @@ export interface CostSignal {
   evidence: Record<string, unknown>;
 }
 
-export function detectCostAnomaly(work: {
+export interface CostDetectionWork {
+  workId: number;
+  category: string | null;
   sanctionAmount: Prisma.Decimal | null;
-  actualAmount: Prisma.Decimal | null;
-}): CostSignal | null {
-  if (
-    work.sanctionAmount == null ||
-    work.actualAmount == null
-  ) {
+  expenditureTotal: Prisma.Decimal;
+  categoryThreshold: Prisma.Decimal | null;
+}
+
+export function detectCostAnomaly(
+  work: CostDetectionWork,
+): (CostSignal & { workId: number }) | null {
+  if (work.sanctionAmount == null) {
     return null;
   }
 
   const sanction = Number(work.sanctionAmount);
-  const actual = Number(work.actualAmount);
+  const expenditure = Number(work.expenditureTotal);
+  const threshold =
+    work.categoryThreshold == null
+      ? null
+      : Number(work.categoryThreshold);
 
   if (
     !Number.isFinite(sanction) ||
-    !Number.isFinite(actual) ||
-    sanction <= 0
+    !Number.isFinite(expenditure) ||
+    !Number.isFinite(threshold ?? 0)
   ) {
     return null;
   }
 
-  if (actual <= sanction) {
+  if (sanction <= 0 || expenditure <= 0 || threshold == null) {
     return null;
   }
 
-  const excessPercent =
-    ((actual - sanction) / sanction) * 100;
+  if (expenditure <= threshold) {
+    return null;
+  }
 
-  const severity =
-    excessPercent >= 20
-      ? 35
-      : excessPercent >= 10
-        ? 25
-        : 15;
+  const excessAmount = expenditure - threshold;
+  const excessPercent = (excessAmount / threshold) * 100;
+
+  /*
+   * P99 expenditure is used as the MVP cost anomaly boundary.
+   *
+   * Severity:
+   * 25 = expenditure is above the P99 threshold
+   * 35 = expenditure is more than 2x the P99 threshold
+   */
+  const severity = expenditure >= threshold * 2 ? 35 : 25;
+
+  const category = work.category ?? "UNKNOWN";
 
   return {
+    workId: work.workId,
     severity,
-    reason: `Actual expenditure exceeds the sanctioned amount by ${excessPercent.toFixed(1)}%.`,
+    reason:
+      `Expenditure of ₹${expenditure.toLocaleString("en-IN")} ` +
+      `is unusually high for category "${category}", ` +
+      `exceeding the category cost threshold of ` +
+      `₹${threshold.toLocaleString("en-IN")} by ` +
+      `${excessPercent.toFixed(1)}%.`,
     evidence: {
+      category,
       sanctionAmount: sanction,
-      actualAmount: actual,
+      expenditureAmount: expenditure,
+      categoryThreshold: threshold,
+      excessAmount: Number(excessAmount.toFixed(2)),
       excessPercent: Number(excessPercent.toFixed(2)),
+      thresholdMethod: "category_p99",
     },
   };
 }

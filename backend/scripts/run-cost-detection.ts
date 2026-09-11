@@ -1,6 +1,7 @@
 import "../src/config/env.js";
 
 import { prisma } from "../src/db/prisma.js";
+
 import { runCostDetection } from "../src/services/detection/cost.service.js";
 
 async function main() {
@@ -18,6 +19,7 @@ main()
   .catch((error) => {
     console.error("\nDetection failed:");
     console.error(error);
+
     process.exitCode = 1;
   })
   .finally(async () => {

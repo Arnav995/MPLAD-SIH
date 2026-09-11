@@ -14,7 +14,11 @@
     "esakshi:parse-works-completed": "tsx scripts/test-works-completed-parser.ts",
     "esakshi:inspect-report": "tsx scripts/inspect-esakshi-report.ts",
     "esakshi:ingest": "tsx scripts/ingest-esakshi.ts",
-    "esakshi:inspect-expenditure": "tsx scripts/inspect-expenditure.ts"
+    "esakshi:inspect-expenditure": "tsx scripts/inspect-expenditure.ts",
+    "esakshi:ingest-expenditure": "tsx scripts/ingest-expenditure.ts",
+    "risk:cost": "tsx scripts/run-cost-detection.ts",
+    "risk:inspect-cost": "tsx scripts/inspect-cost-data.ts",
+    "risk:inspect-cost-distribution": "tsx scripts/inspect-cost-distribution.ts"
   },
   "keywords": [],
   "author": "",
