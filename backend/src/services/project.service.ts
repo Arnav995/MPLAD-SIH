@@ -1,6 +1,8 @@
 import {
   Prisma,
   WorkLifecycleStatus,
+  RiskSeverity,
+  RiskSignalType,
   RiskTier,
 } from "@prisma/client";
 
@@ -13,6 +15,10 @@ export interface ProjectListFilters {
   riskTier?: RiskTier;
   minRiskIndex?: number;
   category?: string;
+
+  signalType?: RiskSignalType;
+  signalSeverity?: RiskSeverity;
+
   page: number;
   pageSize: number;
   sort?: string;
@@ -24,8 +30,7 @@ export async function findProjects(
   const where: Prisma.WorkWhereInput = {};
 
   if (filters.lifecycleStatus) {
-    where.lifecycleStatus =
-      filters.lifecycleStatus;
+    where.lifecycleStatus = filters.lifecycleStatus;
   }
 
   if (filters.category) {
@@ -36,20 +41,21 @@ export async function findProjects(
   }
 
   if (filters.district) {
-  where.district = {
-    name: {
-      contains: filters.district,
-      mode: "insensitive",
-    },
-  };
-}
+    where.district = {
+      name: {
+        contains: filters.district,
+        mode: "insensitive",
+      },
+    };
+  }
 
-if (filters.mp) {
-  where.mpNameFromSource = {
-    contains: filters.mp,
-    mode: "insensitive",
-  };
-}
+  if (filters.mp) {
+    where.mpNameFromSource = {
+      contains: filters.mp,
+      mode: "insensitive",
+    };
+  }
+
   if (
     filters.riskTier ||
     filters.minRiskIndex !== undefined
@@ -57,13 +63,10 @@ if (filters.mp) {
     where.riskAssessment = {};
 
     if (filters.riskTier) {
-      where.riskAssessment.tier =
-        filters.riskTier;
+      where.riskAssessment.tier = filters.riskTier;
     }
 
-    if (
-      filters.minRiskIndex !== undefined
-    ) {
+    if (filters.minRiskIndex !== undefined) {
       where.riskAssessment.riskIndex = {
         gte: new Prisma.Decimal(
           filters.minRiskIndex,
@@ -72,38 +75,73 @@ if (filters.mp) {
     }
   }
 
-  const orderBy =
-    getOrderBy(filters.sort);
+  /*
+   * Filter projects by the actual RiskSignal stored in the DB.
+   *
+   * This is important for pages such as Cost Anomalies:
+   * we want projects that actually have a COST_ANOMALY
+   * signal, not merely the highest-risk projects.
+   */
+  if (
+    filters.signalType ||
+    filters.signalSeverity
+  ) {
+    const signalWhere: Prisma.RiskSignalWhereInput = {};
+
+    if (filters.signalType) {
+      signalWhere.type = filters.signalType;
+    }
+
+    if (filters.signalSeverity) {
+      signalWhere.severity = filters.signalSeverity;
+    }
+
+    where.riskSignals = {
+      some: signalWhere,
+    };
+  }
+
+  const orderBy = getOrderBy(filters.sort);
 
   const skip =
-    (filters.page - 1) *
-    filters.pageSize;
+    (filters.page - 1) * filters.pageSize;
+
+  const riskSignalInclude =
+    filters.signalType || filters.signalSeverity
+      ? {
+          where: {
+            ...(filters.signalType
+              ? { type: filters.signalType }
+              : {}),
+            ...(filters.signalSeverity
+              ? { severity: filters.signalSeverity }
+              : {}),
+          },
+          orderBy: {
+            detectedAt: "desc" as const,
+          },
+        }
+      : {
+          orderBy: {
+            detectedAt: "desc" as const,
+          },
+          take: 5,
+        };
 
   const [projects, total] =
     await Promise.all([
       prisma.work.findMany({
         where,
-
         skip,
-
         take: filters.pageSize,
-
         orderBy,
 
         include: {
           district: true,
           mp: true,
           constituency: true,
-
           riskAssessment: true,
-
-          riskSignals: {
-            orderBy: {
-              detectedAt: "desc",
-            },
-
-            take: 5,
-          },
+          riskSignals: riskSignalInclude,
         },
       }),
 

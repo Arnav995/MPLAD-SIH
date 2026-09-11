@@ -45,8 +45,10 @@ async function main() {
         Number.isFinite(row.expenditure),
     );
 
-  const percentile = (values: number[], p: number) => {
-    if (values.length === 0) return null;
+  const percentile = (values: number[], p: number): number | null => {
+    if (values.length === 0) {
+      return null;
+    }
 
     const index = Math.floor((values.length - 1) * p);
 
@@ -143,16 +145,14 @@ async function main() {
       });
     });
 
-  /*
-   * Cost anomaly inspection
-   *
-   * Use category-specific P99 when the category has enough
-   * observations. For small categories, fall back to the
-   * overall P99 to avoid unstable thresholds.
-   */
   console.log("\n=== P99 COST OUTLIERS ===");
 
   const overallP99 = percentile(expenditureAmounts, 0.99);
+
+  if (overallP99 == null) {
+    console.log("No expenditure data available.");
+    return;
+  }
 
   const categoryThresholds = new Map<string, number>();
 
@@ -162,14 +162,14 @@ async function main() {
       .map((row) => row.expenditure)
       .sort((a, b) => a - b);
 
+    const categoryP99 = percentile(categoryValues, 0.99);
+
     const threshold =
-      stats.count >= 30
-        ? percentile(categoryValues, 0.99)
+      stats.count >= 30 && categoryP99 != null
+        ? categoryP99
         : overallP99;
 
-    if (threshold != null) {
-      categoryThresholds.set(category, threshold);
-    }
+    categoryThresholds.set(category, threshold);
   }
 
   console.log("Overall P99:", overallP99);
@@ -189,7 +189,7 @@ async function main() {
       const threshold =
         categoryThresholds.get(row.category) ?? overallP99;
 
-      return threshold != null && row.expenditure > threshold;
+      return row.expenditure > threshold;
     })
     .sort((a, b) => b.expenditure - a.expenditure);
 
@@ -199,19 +199,21 @@ async function main() {
     const threshold =
       categoryThresholds.get(row.category) ?? overallP99;
 
+    const excessPercent =
+      threshold > 0
+        ? (
+            ((row.expenditure - threshold) / threshold) *
+            100
+          ).toFixed(1)
+        : "0.0";
+
     console.log({
       workId: row.workId,
       category: row.category,
       sanction: row.sanction,
       expenditure: row.expenditure,
       threshold,
-      excessPercent:
-        threshold > 0
-          ? `${(
-              ((row.expenditure - threshold) / threshold) *
-              100
-            ).toFixed(1)}%`
-          : null,
+      excessPercent: `${excessPercent}%`,
     });
   }
 }

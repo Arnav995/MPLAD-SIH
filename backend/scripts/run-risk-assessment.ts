@@ -9,7 +9,6 @@ async function main() {
   const result = await runRiskAssessment();
 
   console.log("Works evaluated:", result.worksEvaluated);
-
   console.log("\nRisk assessment complete.");
 }
 

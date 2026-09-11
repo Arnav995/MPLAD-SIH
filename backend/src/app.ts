@@ -1,30 +1,38 @@
+import cors from "cors";
 import express from "express";
-const app = express();
 
-app.set("json replacer", (_key: string, value: unknown) =>
-  typeof value === "bigint" ? value.toString() : value,
-);
 import duplicateRoutes from "./routes/duplicate.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import summaryRoutes from "./routes/summary.routes.js";
 import alertRoutes from "./routes/alert.routes.js";
 
-app.use(express.json());
+const app = express();
 
-app.get("/api/health", (req,res)=>{
-     res.json({
-          status:"ok",
-          service: "mplad-backend"
-     })
-})
-
-app.use(
-  "/api",
-  summaryRoutes,
+app.set("json replacer", (_key: string, value: unknown) =>
+  typeof value === "bigint" ? value.toString() : value,
 );
 
-app.use("/api",projectRoutes,);
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
+
+app.use(express.json());
+
+app.get("/api/health", (_req, res) => {
+  res.json({
+    status: "ok",
+    service: "mplad-backend",
+  });
+});
+
+app.use("/api", summaryRoutes);
+
+app.use("/api", projectRoutes);
+
 app.use("/api", duplicateRoutes);
+
 app.use("/api", alertRoutes);
 
 app.use(
@@ -41,20 +49,13 @@ app.use(
 
     const isValidationError =
       message.startsWith("Invalid") ||
-      message.includes(
-        "must be a number",
-      ) ||
-      message.includes(
-        "cannot exceed",
-      );
+      message.includes("must be a number") ||
+      message.includes("cannot exceed");
 
-    res.status(
-      isValidationError
-        ? 400
-        : 500,
-    ).json({
+    res.status(isValidationError ? 400 : 500).json({
       error: message,
     });
   },
 );
+
 export default app;

@@ -18,13 +18,16 @@
     "esakshi:ingest-expenditure": "tsx scripts/ingest-expenditure.ts",
     "risk:cost": "tsx scripts/run-cost-detection.ts",
     "risk:inspect-cost": "tsx scripts/inspect-cost-data.ts",
-    "risk:inspect-cost-distribution": "tsx scripts/inspect-cost-distribution.ts"
+    "risk:inspect-cost-distribution": "tsx scripts/inspect-cost-distribution.ts",
+    "risk:consistency": "tsx scripts/run-consistency-detection.ts",
+    "risk:assessment": "tsx scripts/run-risk-assessment.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^26.5.0",
     "prisma": "^7.10.0",
@@ -35,6 +38,7 @@
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "axios": "^1.20.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "pg": "^8.23.0"

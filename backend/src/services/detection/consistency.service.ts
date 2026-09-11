@@ -1,8 +1,9 @@
-import { prisma } from "../../db/prisma.js";
 import {
   RiskSeverity,
   RiskSignalType,
 } from "@prisma/client";
+
+import { prisma } from "../../db/prisma.js";
 
 import { detectConsistencyIssues } from "./consistency.detector.js";
 
@@ -17,6 +18,11 @@ export async function runConsistencyDetection() {
       recommendedAmount: true,
       sanctionAmount: true,
       actualAmount: true,
+      expenditures: {
+        select: {
+          amount: true,
+        },
+      },
     },
   });
 
@@ -24,8 +30,6 @@ export async function runConsistencyDetection() {
   let signalsCreated = 0;
 
   for (const work of works) {
-    const signals = detectConsistencyIssues(work);
-
     worksChecked += 1;
 
     await prisma.riskSignal.deleteMany({
@@ -33,6 +37,23 @@ export async function runConsistencyDetection() {
         workId: work.id,
         type: RiskSignalType.CROSS_STAGE_CONSISTENCY,
       },
+    });
+
+    const expenditureTotal = work.expenditures.reduce(
+      (total, expenditure) =>
+        total + Number(expenditure.amount ?? 0),
+      0,
+    );
+
+    const signals = detectConsistencyIssues({
+      lifecycleStatus: work.lifecycleStatus,
+      recommendationDate: work.recommendationDate,
+      sanctionDate: work.sanctionDate,
+      completionDate: work.completionDate,
+      recommendedAmount: work.recommendedAmount,
+      sanctionAmount: work.sanctionAmount,
+      actualAmount: work.actualAmount,
+      expenditureTotal,
     });
 
     for (const signal of signals) {

@@ -14,9 +14,14 @@ export function detectConsistencyIssues(work: {
   recommendedAmount: unknown;
   sanctionAmount: unknown;
   actualAmount: unknown;
+  expenditureTotal?: unknown;
 }): ConsistencySignal[] {
   const signals: ConsistencySignal[] = [];
 
+  /*
+   * Rule 1:
+   * Completion cannot occur before recommendation.
+   */
   if (
     work.completionDate &&
     work.recommendationDate &&
@@ -30,6 +35,10 @@ export function detectConsistencyIssues(work: {
     });
   }
 
+  /*
+   * Rule 2:
+   * Sanction cannot occur before recommendation.
+   */
   if (
     work.sanctionDate &&
     work.recommendationDate &&
@@ -43,6 +52,10 @@ export function detectConsistencyIssues(work: {
     });
   }
 
+  /*
+   * Rule 3:
+   * Completion cannot occur before sanction.
+   */
   if (
     work.completionDate &&
     work.sanctionDate &&
@@ -56,6 +69,10 @@ export function detectConsistencyIssues(work: {
     });
   }
 
+  /*
+   * Rule 4:
+   * Actual amount should not exceed sanctioned amount.
+   */
   if (
     work.actualAmount != null &&
     work.sanctionAmount != null &&
@@ -69,6 +86,10 @@ export function detectConsistencyIssues(work: {
     });
   }
 
+  /*
+   * Rule 5:
+   * Completed work should have a completion date.
+   */
   if (
     work.lifecycleStatus === WorkLifecycleStatus.COMPLETED &&
     !work.completionDate
@@ -78,6 +99,24 @@ export function detectConsistencyIssues(work: {
       severity: 20,
       reason:
         "Work is marked completed but has no completion date.",
+    });
+  }
+
+  /*
+   * Rule 6:
+   * Expenditure without sanction date is a possible
+   * cross-stage lifecycle inconsistency.
+   */
+  if (
+    work.expenditureTotal != null &&
+    Number(work.expenditureTotal) > 0 &&
+    !work.sanctionDate
+  ) {
+    signals.push({
+      rule: "EXPENDITURE_WITHOUT_SANCTION_DATE",
+      severity: 30,
+      reason:
+        "Expenditure is recorded for a work with no recorded sanction date.",
     });
   }
 
