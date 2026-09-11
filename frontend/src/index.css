@@ -1,0 +1,5 @@
+html, body, #root { min-height: 100%; margin: 0; }
+body { font-family: Inter, sans-serif; background: #f8f9fb; color: #191c1e; }
+* { box-sizing: border-box; }
+button, input, select, textarea { font: inherit; }
+.stitch-page-root { min-height: 100vh; }

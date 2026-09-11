@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <title>MPLADS-Sentinel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Inter", "sans-serif"] },
+            colors: {
+              surface: "#f8f9fb",
+              background: "#f8f9fb",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f3f4f6",
+              "surface-container": "#edeef0",
+              "surface-container-high": "#e7e8ea",
+              "surface-container-highest": "#e1e2e4",
+              "on-surface": "#191c1e",
+              "on-surface-variant": "#444748",
+              outline: "#747878",
+              "outline-variant": "#c4c7c7",
+              primary: "#000000",
+              "on-primary": "#ffffff",
+              secondary: "#006d37",
+              "on-secondary": "#ffffff",
+              "on-secondary-container": "#00743b",
+              error: "#ba1a1a",
+              "on-error": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-error-container": "#93000a",
+              tertiary: "#000000",
+              "tertiary-container": "#2f1500",
+              "on-tertiary-container": "#c76c00",
+              "secondary-fixed": "#66fe9c",
+              "secondary-fixed-dim": "#44e183"
+            }
+          }
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

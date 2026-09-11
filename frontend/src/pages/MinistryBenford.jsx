@@ -1,0 +1,478 @@
+import React from "react";
+import { useStitchNavigation } from "../navigation";
+
+const markup = `
+<!-- SIDEBAR NAVIGATION -->
+<aside class="fixed top-0 bottom-0 left-0 w-64 h-full bg-surface-container-lowest border-r border-surface-container-high z-30 flex flex-col justify-between p-4 select-none">
+<!-- Sidebar Header & Primary Navigation -->
+<div class="space-y-6">
+<!-- Seal & System Brand -->
+<div class="flex items-start gap-3 pb-3 border-b border-surface-container-high">
+<div class="w-8 h-8 rounded border border-surface-container-high flex items-center justify-center bg-surface-container-lowest shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="account_balance">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold tracking-tight text-on-surface leading-tight">MPLADS-Sentinel</span>
+<span class="text-[10px] text-on-surface-variant font-normal leading-normal mt-0.5">Ministry of Statistics and Programme Implementation</span>
+</div>
+</div>
+<!-- Audit Report Action -->
+<div>
+<button class="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-surface-container-lowest hover:bg-surface-container-low border border-surface-container-high rounded-md text-on-surface text-xs font-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+<span class="">New Audit Report</span>
+</button>
+</div>
+<!-- Primary Operational Tabs -->
+<div class="space-y-1">
+<div class="text-[10px] uppercase font-semibold tracking-wider text-outline px-2 mb-1.5">Analytical Suites</div>
+<!-- Tab 1: National Overview -->
+<a class="flex items-center gap-2.5 px-2.5 py-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="dashboard">dashboard</span>
+<span class="">National Overview</span>
+</a>
+<!-- Tab 2: Tier-2 Digest -->
+<a class="flex items-center gap-2.5 px-2.5 py-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="summarize">summarize</span>
+<span class="">Tier-2 Digest</span>
+</a>
+<!-- Tab 3: Benford's Law (SELECTED) -->
+<a class="flex items-center gap-2.5 px-2.5 py-2 rounded-[10px] text-white font-medium bg-[#111111] transition-colors shadow-sm text-xs" href="#">
+<span class="material-symbols-outlined text-white text-[18px]" data-icon="bar_chart">bar_chart</span>
+<span class="text-white">Benford's Law</span>
+</a>
+<!-- Tab 4: Projects -->
+<a class="flex items-center gap-2.5 px-2.5 py-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="folder_open">folder_open</span>
+<span class="">Projects</span>
+</a>
+</div>
+<!-- Secondary Audit Tabs -->
+<div class="space-y-1 pt-2">
+<div class="text-[10px] uppercase font-semibold tracking-wider text-outline px-2 mb-1.5">Governance &amp; Audit</div>
+<a class="flex items-center gap-2.5 px-2.5 py-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified_user">verified_user</span>
+<span class="">Ministry Oversight</span>
+</a>
+<a class="flex items-center gap-2.5 px-2.5 py-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="history_toggle_off">history_toggle_off</span>
+<span class="">Audit Logs</span>
+</a>
+<a class="flex items-center gap-2.5 px-2.5 py-2 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="settings">settings</span>
+<span class="">System Settings</span>
+</a>
+</div>
+</div>
+<!-- Bottom Directorate Session Card with subtle active green dot -->
+<div class="border border-surface-container-high rounded-xl p-2.5 bg-surface-container-lowest">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface font-semibold text-[11px] border border-surface-container-high">
+          MO
+        </div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center gap-1.5">
+<span class="text-xs font-medium text-on-surface truncate">Ministry Directorate Official</span>
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+<span class="text-[11px] text-on-surface-variant">Ministry Oversight</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- TOP BAR -->
+<header class="fixed top-0 right-0 left-64 h-14 bg-surface-container-lowest border-b border-surface-container-high z-20 flex items-center justify-between px-6">
+<!-- Left Search Input -->
+<div class="w-96">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2.5 text-on-surface-variant text-[18px]" data-icon="search">search</span>
+<input class="w-full h-8 pl-8 pr-3 text-xs bg-surface-container-lowest border border-surface-container-high rounded-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary transition-colors" placeholder="Search constituency, state or project identifier..." type="text">
+</div>
+</div>
+<!-- Right Trailing Cluster -->
+<div class="flex items-center gap-4">
+<span class="text-xs font-medium text-on-surface-variant">Latest available analysis</span>
+<div class="h-4 w-px bg-surface-container-high"></div>
+<!-- Icon Actions -->
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded transition-colors" title="Notifications" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="notifications">notifications</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded transition-colors" title="Help" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+<div class="h-4 w-px bg-surface-container-high"></div>
+<!-- Buttons -->
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 border border-surface-container-high rounded-md text-xs font-medium text-on-surface hover:bg-surface-container-low transition-colors" type="button">
+          System Log
+        </button>
+<button class="h-8 px-3.5 bg-primary hover:bg-neutral-800 rounded-md text-xs font-medium text-white transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[15px]" data-icon="file_download">file_download</span>
+<span class="">Export Report</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN VIEW CANVAS -->
+<main class="ml-64 mt-14 p-8 flex-1 max-w-[1400px]">
+<!-- PAGE HEADER (Clean, spacious, telemetry removed) -->
+<section class="mb-4">
+<div class="flex items-baseline justify-between gap-4">
+<div>
+<h1 class="text-2xl font-semibold text-on-surface tracking-tight">Benford's Law</h1>
+<p class="text-sm text-on-surface-variant mt-1">District-level digit analysis for unusual expenditure patterns.</p>
+</div>
+<div class="text-xs font-medium text-on-surface-variant">
+        Latest available analysis
+      </div>
+</div>
+</section>
+<!-- INTRODUCTORY & METHODOLOGY CALLOUT (Compact 2-column split banner) -->
+<div class="mb-6 py-2.5 px-4 bg-surface-container-low border border-surface-container-high rounded-lg flex items-center gap-2 text-xs text-on-surface-variant"><span class="material-symbols-outlined text-[16px] text-on-surface-variant shrink-0" data-icon="info">info</span><span class=""><strong class="font-medium text-on-surface">Interpretation note:</strong> A deviation from Benford’s Law is a statistical signal, <strong class="font-medium text-on-surface">not proof of fraud</strong>. Review flagged districts alongside project-level evidence.</span></div>
+<!-- COMPACT FILTER BAR -->
+<section class="mb-8 bg-surface-container-lowest border border-surface-container-high rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-3 flex-1">
+<!-- Search District -->
+<div class="relative w-60">
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-on-surface-variant text-[16px]" data-icon="search">search</span>
+<input class="w-full h-9 pl-8 pr-3 text-xs bg-surface border border-surface-container-high rounded-[8px] text-on-surface placeholder:text-outline focus:outline-none focus:border-primary transition-colors" placeholder="Search district..." type="text">
+</div>
+<!-- State Dropdown -->
+<div class="relative">
+<select class="h-9 pl-3 pr-8 text-xs font-medium bg-surface border border-surface-container-high rounded-[8px] text-on-surface appearance-none focus:outline-none focus:border-primary cursor-pointer transition-colors">
+<option selected="">All states</option>
+<option>Bihar</option>
+<option>Uttar Pradesh</option>
+<option>Maharashtra</option>
+<option>West Bengal</option>
+<option>Karnataka</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-[16px] pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Deviation Filter Dropdown -->
+<div class="relative">
+<select class="h-9 pl-3 pr-8 text-xs font-medium bg-surface border border-surface-container-high rounded-[8px] text-on-surface appearance-none focus:outline-none focus:border-primary cursor-pointer transition-colors">
+<option selected="">All deviation statuses</option>
+<option>Significant deviation</option>
+<option>Under observation</option>
+<option>Monitored</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant text-[16px] pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<div class="text-xs text-on-surface-variant font-medium tabular-nums">
+      38 audited districts
+    </div>
+</section>
+<!-- MAIN VISUAL HERO (BENFORD CHART + ACTIVE DISTRICT PANEL) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8 items-stretch">
+<!-- Primary Column: Leading-Digit Chart -->
+<div class="lg:col-span-8 bg-surface-container-lowest border border-surface-container-high rounded-xl p-6 flex flex-col justify-between">
+<div>
+<!-- Chart Header & Legend -->
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-5 border-b border-surface-container-high">
+<div>
+<h2 class="text-base font-semibold text-on-surface">Leading-digit distribution</h2>
+<p class="text-xs text-on-surface-variant mt-0.5">Observed vs Expected</p>
+</div>
+<div class="flex items-center gap-4 shrink-0 pt-1 sm:pt-0">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm bg-neutral-900 inline-block"></span>
+<span class="text-xs text-on-surface">Observed</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-1 bg-emerald-600 rounded-full inline-block"></span>
+<span class="text-xs text-emerald-700 font-medium">Expected</span>
+</div>
+</div>
+</div>
+<!-- The Visual Chart Canvas -->
+<div class="pt-8 pb-4">
+<div class="relative h-72 w-full flex items-end justify-between gap-3 sm:gap-5 px-3">
+<!-- Clean horizontal grid lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none text-[10px] text-outline tabular-nums border-b border-surface-container-high">
+<div class="border-b border-surface-container-low w-full flex justify-between pr-1"><span class="">35%</span></div>
+<div class="border-b border-surface-container-low w-full flex justify-between pr-1"><span class="">28%</span></div>
+<div class="border-b border-surface-container-low w-full flex justify-between pr-1"><span class="">21%</span></div>
+<div class="border-b border-surface-container-low w-full flex justify-between pr-1"><span class="">14%</span></div>
+<div class="border-b border-surface-container-low w-full flex justify-between pr-1"><span class="">7%</span></div>
+<div class="w-full flex justify-between pr-1 text-transparent"><span class="">0%</span></div>
+</div>
+<!-- Digit 1: Exp 30.1%, Obs 29.4% -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-on-surface-variant mb-1.5 tabular-nums font-medium">29.4%</div>
+<div class="w-full max-w-[32px] bg-neutral-900 rounded-t-sm transition-all" style="height: 84%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 86%;"></div>
+<div class="mt-2.5 text-xs font-medium text-on-surface">1</div>
+</div>
+<!-- Digit 2: Exp 17.6%, Obs 16.8% -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-on-surface-variant mb-1.5 tabular-nums font-medium">16.8%</div>
+<div class="w-full max-w-[32px] bg-neutral-900 rounded-t-sm transition-all" style="height: 48%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 50.2%;"></div>
+<div class="mt-2.5 text-xs font-medium text-on-surface">2</div>
+</div>
+<!-- Digit 3: Exp 12.5%, Obs 11.9% -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-on-surface-variant mb-1.5 tabular-nums font-medium">11.9%</div>
+<div class="w-full max-w-[32px] bg-neutral-900 rounded-t-sm transition-all" style="height: 34%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 35.7%;"></div>
+<div class="mt-2.5 text-xs font-medium text-on-surface">3</div>
+</div>
+<!-- Digit 4: Elevated Anomaly (Obs 24.2% muted red vs Exp 9.7% green) -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-red-600 mb-1.5 tabular-nums font-semibold">24.2%</div>
+<div class="w-full max-w-[32px] bg-red-600 rounded-t-sm transition-all relative" style="height: 69%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 27.7%;"></div>
+<div class="mt-2.5 text-xs font-semibold text-on-surface">4</div>
+</div>
+<!-- Digit 5: Exp 7.9%, Obs 6.1% -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-on-surface-variant mb-1.5 tabular-nums font-medium">6.1%</div>
+<div class="w-full max-w-[32px] bg-neutral-900 rounded-t-sm transition-all" style="height: 17%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 22.5%;"></div>
+<div class="mt-2.5 text-xs font-medium text-on-surface">5</div>
+</div>
+<!-- Digit 6: Exp 6.7%, Obs 4.8% -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-on-surface-variant mb-1.5 tabular-nums font-medium">4.8%</div>
+<div class="w-full max-w-[32px] bg-neutral-900 rounded-t-sm transition-all" style="height: 14%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 19.1%;"></div>
+<div class="mt-2.5 text-xs font-medium text-on-surface">6</div>
+</div>
+<!-- Digit 7: Exp 5.8%, Obs 3.2% -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-on-surface-variant mb-1.5 tabular-nums font-medium">3.2%</div>
+<div class="w-full max-w-[32px] bg-neutral-900 rounded-t-sm transition-all" style="height: 9%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 16.5%;"></div>
+<div class="mt-2.5 text-xs font-medium text-on-surface">7</div>
+</div>
+<!-- Digit 8: Exp 5.1%, Obs 2.1% -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-on-surface-variant mb-1.5 tabular-nums font-medium">2.1%</div>
+<div class="w-full max-w-[32px] bg-neutral-900 rounded-t-sm transition-all" style="height: 6%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 14.5%;"></div>
+<div class="mt-2.5 text-xs font-medium text-on-surface">8</div>
+</div>
+<!-- Digit 9: Exp 4.6%, Obs 1.9% -->
+<div class="relative flex-1 flex flex-col items-center h-full justify-end z-10 group">
+<div class="text-[11px] text-on-surface-variant mb-1.5 tabular-nums font-medium">1.9%</div>
+<div class="w-full max-w-[32px] bg-neutral-900 rounded-t-sm transition-all" style="height: 5%;"></div>
+<div class="absolute w-full max-w-[40px] border-t-2 border-emerald-600 pointer-events-none" style="bottom: 13.1%;"></div>
+<div class="mt-2.5 text-xs font-medium text-on-surface">9</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Column: Active District Panel (~320-340px) -->
+<div class="lg:col-span-4 bg-surface-container-lowest border border-surface-container-high rounded-xl p-6 flex flex-col justify-between">
+<div>
+<!-- Section Header & Title -->
+<div class="pb-4 border-b border-surface-container-high">
+<span class="text-[10px] uppercase tracking-wider text-outline font-semibold">Active District</span>
+<h3 class="text-xl font-semibold text-on-surface mt-0.5">Gaya</h3>
+<p class="text-xs text-on-surface-variant">Bihar</p>
+</div>
+<!-- Signal Section -->
+<div class="py-5 space-y-4">
+<div>
+<span class="text-[10px] uppercase tracking-wider text-outline font-semibold block mb-1">Anomaly Signal</span>
+<div class="text-sm font-medium text-on-surface">
+              Elevated frequency on leading digit 4
+            </div>
+</div>
+<!-- Key Metrics cleanly aligned -->
+<div class="p-3.5 bg-surface-container-low rounded-lg border border-surface-container-high space-y-2">
+<div class="flex items-center justify-between text-xs">
+<span class="text-on-surface-variant">Observed:</span>
+<span class="font-semibold text-red-600 tabular-nums">24.2%</span>
+</div>
+<div class="flex items-center justify-between text-xs">
+<span class="text-on-surface-variant">Expected:</span>
+<span class="font-semibold text-emerald-700 tabular-nums">9.7%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-4 border-t border-surface-container-high space-y-3">
+<div class="text-center">
+<a class="text-xs font-medium text-on-surface hover:text-black hover:underline inline-flex items-center gap-1 transition-colors" href="#">
+              View technical evidence
+              <span class="text-sm leading-none">→</span>
+</a>
+</div>
+<button class="w-full py-2.5 px-4 bg-primary hover:bg-neutral-800 text-white rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 transition-colors" type="button">
+<span class="">View flagged projects</span>
+<span class="text-sm leading-none">→</span>
+</button>
+</div>
+</div>
+</section>
+<!-- DISTRICTS REQUIRING REVIEW TABLE -->
+<section class="mb-8 bg-surface-container-lowest border border-surface-container-high rounded-xl overflow-hidden">
+<div class="p-5 border-b border-surface-container-high">
+<h2 class="text-base font-semibold text-on-surface">Districts requiring review</h2>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-container-high text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider">
+<th class="py-3 px-5">District</th>
+<th class="py-3 px-5">Status</th>
+<th class="py-3 px-5">Digit Variance</th>
+<th class="py-3 px-5">Sample Size</th>
+<th class="py-3 px-5 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high text-xs">
+<!-- Row 1: Gaya -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-5">
+<div class="font-medium text-on-surface">Gaya</div>
+<div class="text-[11px] text-on-surface-variant">Bihar</div>
+</td>
+<td class="py-4 px-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-red-50 text-red-700 border border-red-200 text-[11px] font-medium">
+                  Significant deviation
+                </span>
+</td>
+<td class="py-4 px-5 text-on-surface">
+                Digit 4 clustering
+              </td>
+<td class="py-4 px-5 tabular-nums text-on-surface-variant">1,248 transactions</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 text-xs font-medium text-on-surface hover:text-black hover:underline" href="#">
+                  View flagged projects
+                  <span class="text-xs">→</span>
+</a>
+</td>
+</tr>
+<!-- Row 2: Hardoi -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-5">
+<div class="font-medium text-on-surface">Hardoi</div>
+<div class="text-[11px] text-on-surface-variant">Uttar Pradesh</div>
+</td>
+<td class="py-4 px-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-red-50 text-red-700 border border-red-200 text-[11px] font-medium">
+                  Significant deviation
+                </span>
+</td>
+<td class="py-4 px-5 text-on-surface">
+                Digit 5 clustering
+              </td>
+<td class="py-4 px-5 tabular-nums text-on-surface-variant">984 transactions</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 text-xs font-medium text-on-surface hover:text-black hover:underline" href="#">
+                  View flagged projects
+                  <span class="text-xs">→</span>
+</a>
+</td>
+</tr>
+<!-- Row 3: Jalgaon -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-5">
+<div class="font-medium text-on-surface">Jalgaon</div>
+<div class="text-[11px] text-on-surface-variant">Maharashtra</div>
+</td>
+<td class="py-4 px-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[11px] font-medium">
+                  Under observation
+                </span>
+</td>
+<td class="py-4 px-5 text-on-surface">
+                Digit 2 variance
+              </td>
+<td class="py-4 px-5 tabular-nums text-on-surface-variant">842 transactions</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 text-xs font-medium text-on-surface hover:text-black hover:underline" href="#">
+                  View flagged projects
+                  <span class="text-xs">→</span>
+</a>
+</td>
+</tr>
+<!-- Row 4: Murshidabad -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-5">
+<div class="font-medium text-on-surface">Murshidabad</div>
+<div class="text-[11px] text-on-surface-variant">West Bengal</div>
+</td>
+<td class="py-4 px-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[11px] font-medium">
+                  Under observation
+                </span>
+</td>
+<td class="py-4 px-5 text-on-surface">
+                Low sample variance
+              </td>
+<td class="py-4 px-5 tabular-nums text-on-surface-variant">715 transactions</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 text-xs font-medium text-on-surface hover:text-black hover:underline" href="#">
+                  View flagged projects
+                  <span class="text-xs">→</span>
+</a>
+</td>
+</tr>
+<!-- Row 5: Mandya -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-5">
+<div class="font-medium text-on-surface">Mandya</div>
+<div class="text-[11px] text-on-surface-variant">Karnataka</div>
+</td>
+<td class="py-4 px-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 text-[11px] font-medium">
+                  Monitored
+                </span>
+</td>
+<td class="py-4 px-5 text-on-surface">
+                Expected tolerances
+              </td>
+<td class="py-4 px-5 tabular-nums text-on-surface-variant">1,090 transactions</td>
+<td class="py-4 px-5 text-right">
+<a class="inline-flex items-center gap-1 text-xs font-medium text-on-surface hover:text-black hover:underline" href="#">
+                  View flagged projects
+                  <span class="text-xs">→</span>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- STATISTICAL INTERPRETATION (SIMPLIFIED) -->
+<section class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-5 mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="space-y-1">
+<h3 class="text-xs font-semibold text-on-surface">How to interpret this</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+        A deviation is a statistical signal, not proof of fraud. Review flagged districts alongside project-level evidence.
+      </p>
+</div>
+<a class="text-xs font-medium text-on-surface hover:text-black hover:underline whitespace-nowrap inline-flex items-center gap-1 transition-colors self-start sm:self-center" href="#">
+      How Benford's Law is calculated
+      <span class="text-xs">→</span>
+</a>
+</section>
+<!-- FOOTER -->
+<footer class="pt-5 pb-8 border-t border-surface-container-high text-xs text-on-surface-variant">
+<div class="">National Informatics Centre · Ministry of Statistics and Programme Implementation</div>
+</footer>
+</main>
+
+
+`;
+
+export default function MinistryBenford() {
+  useStitchNavigation();
+  return (
+    <div
+      className="stitch-page-root"
+      dangerouslySetInnerHTML={{ __html: markup }}
+    />
+  );
+}
