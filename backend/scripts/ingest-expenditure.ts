@@ -12,3 +12,4 @@ import { EsakshiIngestionService } from "../src/services/ingestion/esakshi-inges
     console.error("Ingestion failed:", error);
   }
 })();
+
