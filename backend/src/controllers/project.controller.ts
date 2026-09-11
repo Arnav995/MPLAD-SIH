@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { WorkLifecycleStatus, RiskTier } from "@prisma/client";
-
+import { toProjectListItem } from "../mappers/project.mapper.js";
 import {
   findProjects,
   findProjectById,
@@ -31,7 +31,10 @@ export async function getProjectsController(
       sort: getStringQuery(req.query.sort),
     });
 
-    res.json(result);
+    res.json({
+      projects: result.projects.map(toProjectListItem),
+      total: result.total,
+    });
   } catch (error) {
     next(error);
   }

@@ -34,7 +34,7 @@ export async function runRiskAssessment() {
       }
 
       if (signal.type === RiskSignalType.DUPLICATE_OVERLAP) {
-        duplicateScore = Math.max(duplicateScore, score);
+          duplicateScore = Math.min(35, Math.max(duplicateScore, score));
       }
 
       if (
@@ -56,10 +56,16 @@ export async function runRiskAssessment() {
       costScore + duplicateScore + consistencyScore,
     );
 
+    const signalTypeCount = [
+            costScore > 0,
+            duplicateScore > 0,
+            consistencyScore > 0,
+          ].filter(Boolean).length;
+
     const tier =
-      riskIndex >= 70
+      signalTypeCount >= 2 && riskIndex >= 70
         ? RiskTier.TIER_2
-        : riskIndex >= 40
+        : riskIndex >= 35
           ? RiskTier.TIER_1
           : RiskTier.CLEAN;
 

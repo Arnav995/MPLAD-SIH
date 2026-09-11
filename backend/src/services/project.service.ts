@@ -36,23 +36,20 @@ export async function findProjects(
   }
 
   if (filters.district) {
-    where.district = {
-      name: {
-        contains: filters.district,
-        mode: "insensitive",
-      },
-    };
-  }
+  where.district = {
+    name: {
+      contains: filters.district,
+      mode: "insensitive",
+    },
+  };
+}
 
-  if (filters.mp) {
-    where.mp = {
-      name: {
-        contains: filters.mp,
-        mode: "insensitive",
-      },
-    };
-  }
-
+if (filters.mp) {
+  where.mpNameFromSource = {
+    contains: filters.mp,
+    mode: "insensitive",
+  };
+}
   if (
     filters.riskTier ||
     filters.minRiskIndex !== undefined

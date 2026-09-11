@@ -1,8 +1,13 @@
 import express from "express";
 const app = express();
 
+app.set("json replacer", (_key: string, value: unknown) =>
+  typeof value === "bigint" ? value.toString() : value,
+);
+import duplicateRoutes from "./routes/duplicate.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import summaryRoutes from "./routes/summary.routes.js";
+import alertRoutes from "./routes/alert.routes.js";
 
 app.use(express.json());
 
@@ -18,10 +23,9 @@ app.use(
   summaryRoutes,
 );
 
-app.use(
-  "/api",
-  projectRoutes,
-);
+app.use("/api",projectRoutes,);
+app.use("/api", duplicateRoutes);
+app.use("/api", alertRoutes);
 
 app.use(
   (
