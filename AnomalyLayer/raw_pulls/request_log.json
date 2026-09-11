@@ -1,0 +1,126 @@
+[
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getMpAndConstCombo",
+    "payload": {
+      "const_combo": "250,2,"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,250,3019087,2,7",
+      "key": "Works Recommended"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,250,3019087,2,7",
+      "key": "Works Completed"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,250,3019087,2,7",
+      "key": "Expenditure on Completed and On-going Works as on Date"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getMpAndConstCombo",
+    "payload": {
+      "const_combo": "251,2,"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,251,3042415,2,7",
+      "key": "Works Recommended"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,251,3042415,2,7",
+      "key": "Works Completed"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,251,3042415,2,7",
+      "key": "Expenditure on Completed and On-going Works as on Date"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getMpAndConstCombo",
+    "payload": {
+      "const_combo": "255,2,"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,255,3042414,2,7",
+      "key": "Works Recommended"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,255,3042414,2,7",
+      "key": "Works Completed"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,255,3042414,2,7",
+      "key": "Expenditure on Completed and On-going Works as on Date"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getMpAndConstCombo",
+    "payload": {
+      "const_combo": "257,2,"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,257,3042421,2,7",
+      "key": "Works Recommended"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,257,3042421,2,7",
+      "key": "Works Completed"
+    },
+    "status": "ok"
+  },
+  {
+    "endpoint": "/rest/PreLoginDashboardData/getTilesReportData",
+    "payload": {
+      "combo": "21,257,3042421,2,7",
+      "key": "Expenditure on Completed and On-going Works as on Date"
+    },
+    "status": "ok"
+  }
+]

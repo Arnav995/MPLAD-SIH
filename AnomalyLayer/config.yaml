@@ -1,0 +1,40 @@
+# MPLADS-Sentinel — Ingestion Pipeline Configuration
+# This file defines exactly what gets pulled. Keep the scope small and explicit —
+# never widen it to "all constituencies" without deliberately editing this file.
+
+# --- Test scope: ONE state, TWO constituencies (small-area test as requested) ---
+# Maharashtra = 21 (from forensic findings). Replace with whichever state you want to test.
+scope:
+  state_id: 21
+  house_type: 2          # 2 = Lok Sabha, 1 = Rajya Sabha
+  tenure_id: 7            # 7 = 18th Lok Sabha (current)
+  constituency_ids: [250, 251, 255, 257]  # Nagpur + Ramtek(SC) + Pune + Wardha comparison set
+
+# --- Safety / server-courtesy settings ---
+safety:
+  min_request_interval_seconds: 1.5   # hard floor between any two outgoing requests
+  max_retries: 2                      # do not hammer on failure — fail gracefully and log it
+  retry_backoff_seconds: 5
+  request_timeout_seconds: 20
+  block_national_scope: true          # refuses any call where state_id==0 AND constituency_id==0
+  user_agent: "MPLADS-Sentinel-ResearchPipeline/0.1 (educational/hackathon project; scoped, throttled, non-commercial)"
+
+# --- Attachment fetching: OFF by default. Turn on deliberately, per work ID, never bulk. ---
+attachments:
+  enabled: false
+  # If enabled, only these specific, already-known WORK_IDs will have their attachments fetched —
+  # never a loop over "all works". Add IDs here only after seeing them in the ingested dataset.
+  work_ids_to_fetch: []
+  max_attachments_per_run: 5   # hard cap, even if the list above is longer
+
+# --- Citizen reviews: OFF by default, and capped even when on. ---
+reviews:
+  enabled: false
+  work_recommendation_ids_to_fetch: []
+  max_reviews_per_run: 10
+  store_free_text: false   # if false, only STAR_RATING is kept — REVIEW_DETAIL (free text, possible PII) is discarded
+
+# --- Caching: avoid re-hitting the server on repeated dev/test runs ---
+cache:
+  directory: "./cache/raw"
+  use_cache_if_present: true

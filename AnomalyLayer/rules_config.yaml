@@ -1,0 +1,147 @@
+# MPLADS-Sentinel — Layer 1 Rule Catalog
+# Every rule traces to a specific MPLADS Guidelines clause or a documented CAG audit finding.
+# Update this file, not the engine code, when guidelines change or new rules are identified.
+
+rules:
+
+  - id: R1
+    description: "Work not sanctioned within 75 days of recommendation receipt"
+    source: "MPLADS Guidelines — sanction timeline"
+    check_type: row_threshold
+    field: days_to_sanction
+    operator: ">"
+    value: 75
+    only_if: {field: SANCTION_DATE, not_null: true}
+    weight: 15
+
+  - id: R2
+    description: "No sanction and no rejection recorded 45+ days after recommendation"
+    source: "MPLADS Guidelines — rejection communication timeline"
+    check_type: row_threshold
+    field: days_since_recommendation
+    operator: ">"
+    value: 45
+    only_if: {field: SANCTION_DATE, is_null: true}
+    weight: 10
+
+  - id: R3
+    description: "Completion took more than 365 days from sanction with no documented exception"
+    source: "MPLADS Guidelines — completion timeline norm"
+    check_type: row_threshold
+    field: days_to_complete
+    operator: ">"
+    value: 365
+    only_if: {field: ACTUAL_END_DATE, not_null: true}
+    weight: 15
+
+  - id: R4
+    description: "MP's total sanctioned amount in a financial year exceeds the ₹5 crore annual entitlement"
+    source: "MPLADS scheme financial rules — annual entitlement ceiling"
+    check_type: aggregate_ceiling
+    group_by: [MP_NAME, FY]
+    field: SANCTION_AMOUNT
+    aggregate: sum
+    value: 50000000
+    only_if: {field: SANCTION_DATE, not_null: true}
+    weight: 25
+
+  - id: R5
+    description: "Project cost below ₹1 lakh guideline floor — low-value micro-work requiring clustering corroboration"
+    source: "MPLADS Guidelines — minimum project cost floor"
+    check_type: row_threshold
+    field: SANCTION_AMOUNT
+    operator: "<"
+    value: 100000
+    weight: 10
+
+  - id: R6
+    description: "MP's SC-area allocation for the FY is below the mandated 15% of entitlement"
+    source: "MPLADS Guidelines — SC allocation minimum"
+    check_type: aggregate_share_floor
+    group_by: [MP_NAME, FY]
+    share_field: IS_SC_AREA
+    denominator_field: SANCTION_AMOUNT
+    min_share: 0.15
+    weight: 20
+
+  - id: R7
+    description: "MP's ST-area allocation for the FY is below the mandated 7.5% of entitlement"
+    source: "MPLADS Guidelines — ST allocation minimum"
+    check_type: aggregate_share_floor
+    group_by: [MP_NAME, FY]
+    share_field: IS_ST_AREA
+    denominator_field: SANCTION_AMOUNT
+    min_share: 0.075
+    weight: 20
+
+  - id: R8
+    description: "Cumulative works to a single Trust/Society exceed the ₹50 lakh lifetime ceiling (₹75 lakh for tribal-welfare trusts)"
+    source: "MPLADS Guidelines Para 3.21.2 — Trust/Society ceiling"
+    check_type: aggregate_cumulative_ceiling
+    group_by: [VENDOR_NAME]
+    field: SANCTION_AMOUNT
+    value: 5000000
+    value_override_field: IS_TRIBAL_TRUST
+    value_override: 7500000
+    only_if: {field: RECIPIENT_TYPE, equals: "Trust/Society"}
+    weight: 20
+
+  - id: R9
+    description: "Work description/category matches an ineligible category (religious structure, land acquisition, recurring expenditure, private benefit, stock/inventory purchase)"
+    source: "MPLADS Guidelines — eligibility/prohibition rules"
+    check_type: keyword_prohibition
+    field: WORK_DESCRIPTION
+    keywords: ["temple construction", "mosque construction", "church construction", "gurudwara construction",
+               "land acquisition", "land purchase", "purchase of vehicle", "stock purchase", "inventory purchase",
+               "recurring maintenance grant", "personal residence", "private property"]
+    weight: 25
+
+  - id: R10
+    description: "Completed work description implies private/restricted access rather than public use"
+    source: "MPLADS Guidelines — public-use requirement"
+    check_type: keyword_prohibition
+    field: WORK_DESCRIPTION
+    keywords: ["private access", "residents only", "society members only", "restricted entry"]
+    only_if: {field: is_completed_flag, equals: true}
+    weight: 8   # low weight — keyword-based alone, needs corroboration to reach Tier 2
+
+# --- Data-derived rules (thresholds computed from the dataset itself, not the guidelines text) ---
+
+  - id: D1
+    description: "Sanction amount is a statistical outlier (beyond 1.5x IQR) for its work category"
+    source: "Data-derived — category cost benchmark"
+    check_type: iqr_outlier
+    group_by: [WORK_CATEGORY]
+    field: SANCTION_AMOUNT
+    iqr_multiplier: 1.5
+    weight: 15
+
+  - id: D2
+    description: "District's median sanction time is far faster than the national median — possible rubber-stamping"
+    source: "Data-derived — process-integrity benchmark"
+    check_type: group_median_deviation
+    group_by: [IDA_NAME]
+    field: days_to_sanction
+    deviation_below_national_median_days: 20
+    weight: 10
+
+  - id: D3
+    description: "Shared recommendation letter bundle with tranche fragmentation (>= 3 works within ±15% tolerance) totaling >= ₹50L — potential engineered proposal fragmentation"
+    source: "Data-derived — deterministic letter-level structural tranche clustering (GFR Rule 157 anti-splitting principle)"
+    check_type: shared_letter_bundle
+    group_by: [CONSTITUENCY, LETTER_NO]
+    min_works: 3
+    rel_tolerance: 0.15
+    min_total_amount: 5000000
+    weight: 15
+
+  - id: D4
+    description: "Just-below-threshold budget positioning (within 1-2% or ₹2,000 below key round slabs ₹1L, ₹10L, ₹25L, ₹50L, ₹1Cr) — potential approval ceiling or procurement threshold evasion"
+    source: "Data-derived — forensic threshold clustering & anti-evasion"
+    check_type: just_below_threshold
+    field: SANCTION_AMOUNT
+    thresholds: [100000, 1000000, 2500000, 5000000, 10000000]
+    max_delta_pct: 0.01
+    max_delta_abs: 2000
+    weight: 15
+
