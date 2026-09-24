@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  //previewFeatures = ["views"]
 }
 
 datasource db {
@@ -437,3 +438,8 @@ model RawRecord {
   @@index([reportName])
   @@index([sourceRecordId])
 }
+
+// view state_project_counts {
+//   state_name String @unique
+//   projects   Int
+// }

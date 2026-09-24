@@ -1,0 +1,328 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Audit Logs — MPLADS Portal</title>
+<!-- Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration Verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-container": "#1c1b1b",
+            "on-primary-fixed-variant": "#474646",
+            "outline": "#747878",
+            "on-surface": "#191c1e",
+            "tertiary-container": "#2f1500",
+            "tertiary-fixed": "#ffdcc3",
+            "tertiary": "#000000",
+            "on-secondary-fixed": "#00210d",
+            "inverse-primary": "#c8c6c5",
+            "secondary-container": "#66fe9c",
+            "surface-container-highest": "#e1e2e4",
+            "background": "#f8f9fb",
+            "error-container": "#ffdad6",
+            "on-surface-variant": "#444748",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#e1e2e4",
+            "on-secondary-fixed-variant": "#005228",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#2f1500",
+            "inverse-surface": "#2e3132",
+            "on-tertiary": "#ffffff",
+            "primary-fixed": "#e5e2e1",
+            "surface-tint": "#5f5e5e",
+            "on-secondary-container": "#00743b",
+            "inverse-on-surface": "#f0f1f3",
+            "surface-container": "#edeef0",
+            "surface-bright": "#f8f9fb",
+            "outline-variant": "#c4c7c7",
+            "on-tertiary-fixed-variant": "#6e3900",
+            "surface-container-high": "#e7e8ea",
+            "on-primary-container": "#858383",
+            "surface-container-low": "#f3f4f6",
+            "primary": "#000000",
+            "surface": "#f8f9fb",
+            "on-primary-fixed": "#1c1b1b",
+            "tertiary-fixed-dim": "#ffb77d",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#66fe9c",
+            "primary-fixed-dim": "#c8c6c5",
+            "on-tertiary-container": "#c76c00",
+            "on-primary": "#ffffff",
+            "secondary-fixed-dim": "#44e183",
+            "on-error": "#ffffff",
+            "on-background": "#191c1e",
+            "surface-dim": "#d9dadc",
+            "error": "#ba1a1a",
+            "secondary": "#006d37"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin-tablet": "1.5rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "gutter-desktop": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-xxl": "3rem",
+            "gutter": "1rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "margin-desktop": "2rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "display-lg-mobile": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "numeric-metric": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "numeric-metric": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.025em", "fontWeight": "500" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "body-lg": ["15px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased flex h-screen w-screen overflow-hidden font-body-md">
+<!-- Fixed Desktop Sidebar Navigation Rail (width 16rem / 64) -->
+<aside class="fixed top-0 left-0 h-screen w-64 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant z-30 select-none">
+<div class="p-4 flex flex-col flex-1">
+<!-- Top Brand Header -->
+<div class="flex items-center gap-3 px-2 py-3 mb-6">
+<div class="w-9 h-9 rounded flex items-center justify-center bg-surface-container-low border border-outline-variant text-on-surface shrink-0">
+<!-- Institutional Seal / National Emblem Icon Representation -->
+<span class="material-symbols-outlined text-[22px]" data-icon="account_balance">account_balance</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface tracking-tight truncate">MPLADS Portal</span>
+<span class="text-[11px] leading-[14px] text-on-surface-variant truncate">District Authority Oversight</span>
+</div>
+</div>
+<!-- Primary Navigation Links -->
+<nav class="space-y-1">
+<!-- 1. District Overview -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded-lg text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="">District Overview</span>
+</a>
+<!-- 2. Project Verification -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded-lg text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="fact_check">fact_check</span>
+<span class="">Project Verification</span>
+</a>
+<!-- 3. Duplicate Detection -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded-lg text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="content_copy">content_copy</span>
+<span class="">Duplicate Detection</span>
+</a>
+<!-- 4. Cost Anomalies -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded-lg text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="monitoring">monitoring</span>
+<span class="">Cost Anomalies</span>
+</a>
+<!-- 5. Audit Logs -> ACTIVE STATE -->
+<a class="flex items-center gap-3 px-3 py-2.5 bg-primary text-on-primary rounded-[10px] shadow-sm text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-primary" data-icon="history_edu">history_edu</span>
+<span class="font-semibold text-on-primary">Audit Logs</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Anchored Section -->
+<div class="mt-auto p-4 flex flex-col space-y-3">
+<div class="pt-2 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded-lg text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[19px]" data-icon="settings">settings</span>
+<span class="">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded-lg text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[19px]" data-icon="help_outline">help_outline</span>
+<span class="">Support</span>
+</a>
+</div>
+<!-- District Authority Profile Card -->
+<div class="pt-3 border-t border-outline-variant flex items-center gap-3 px-2 py-2 bg-surface-container-low rounded-[10px] border border-outline-variant">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-semibold text-label-sm tracking-wider shrink-0">
+          DM
+        </div>
+<div class="flex flex-col min-w-0">
+<span class="text-label-md font-semibold text-on-surface leading-tight truncate">District Magistrate</span>
+<span class="text-[11px] text-on-surface-variant leading-tight truncate">Gaya District, Bihar</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas Container (offset by sidebar width 64 / 16rem) -->
+<div class="flex-1 flex flex-col pl-64 min-w-0 h-screen overflow-hidden bg-background">
+<!-- Global Top Navigation Bar -->
+<header class="h-14 w-full bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-8 shrink-0 z-20">
+<!-- Left: Global Search Input -->
+<div class="flex items-center w-full max-w-md">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" data-icon="search">search</span>
+<input class="w-full h-9 pl-9 pr-3 text-body-sm bg-surface-container-lowest text-on-surface placeholder:text-outline border border-outline-variant rounded-[8px] focus:outline-none focus:border-primary focus:ring-0 transition-colors" placeholder="Search projects, reference codes, or locations..." type="text">
+</div>
+</div>
+<!-- Right Action Clusters -->
+<div class="flex items-center gap-3">
+<!-- Institutional Role Pill -->
+<div class="hidden sm:flex items-center gap-2 px-2.5 py-1 bg-surface-container-low border border-outline-variant rounded-full text-label-sm text-on-surface">
+<span class="w-2 h-2 rounded-full bg-[#06C167] shrink-0"></span>
+<span class="font-medium">District Authority</span>
+</div>
+<div class="h-4 w-px bg-outline-variant mx-1"></div>
+<!-- Utility Icon Buttons -->
+<button class="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-[8px] border border-transparent hover:border-outline-variant transition-colors" title="Notifications" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+</button>
+<button class="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-[8px] border border-transparent hover:border-outline-variant transition-colors" title="Help &amp; Reference" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+</button>
+<!-- Primary Action -->
+<button class="flex items-center gap-2 h-9 px-3.5 bg-primary hover:bg-black text-on-primary rounded-[8px] text-body-sm font-medium transition-colors shadow-sm ml-1" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+<span class="">Export Review Dossier</span>
+</button>
+</div>
+</header>
+<!-- Main Workspace Scroll Area -->
+<main class="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+<!-- Page Header & Administrative Breadcrumb -->
+<section class="space-y-1">
+<div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span class="">MPLADS</span>
+<span class="text-outline-variant">/</span>
+<span class="">District Oversight</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-semibold">Gaya District</span>
+</div>
+<div class="flex items-baseline justify-between pt-1">
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">Audit Logs</h1>
+<p class="text-body-md text-on-surface-variant mt-0.5">Review recent activity and actions recorded during project oversight.</p>
+</div>
+
+</div>
+</section>
+<!-- Institutional Summary Metric Band (12px rounded container, white surface, 1px border, 4 columns) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-[12px] grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-outline-variant shadow-none">
+<!-- Metric 1: Recent Activity -->
+<div class="p-5 flex flex-col justify-between"><span class="text-label-sm text-on-surface-variant tracking-wider uppercase font-semibold">Recent Activity</span><div class="mt-2 flex items-baseline"><span class="text-[30px] leading-[36px] font-semibold text-on-surface tabular-nums">28</span></div></div>
+<!-- Metric 2: Projects Reviewed -->
+<div class="p-5 flex flex-col justify-between"><span class="text-label-sm text-on-surface-variant tracking-wider uppercase font-semibold">Projects Reviewed</span><div class="mt-2 flex items-baseline"><span class="text-[30px] leading-[36px] font-semibold text-on-surface tabular-nums">14</span></div></div>
+<!-- Metric 3: Flagged Projects Reviewed -->
+<div class="p-5 flex flex-col justify-between"><span class="text-label-sm text-on-surface-variant tracking-wider uppercase font-semibold">Flagged Projects Reviewed</span><div class="mt-2 flex items-baseline"><span class="text-[30px] leading-[36px] font-semibold text-on-surface tabular-nums">9</span></div></div>
+<!-- Metric 4: Latest Activity -->
+<div class="p-5 flex flex-col justify-between"><span class="text-label-sm text-on-surface-variant tracking-wider uppercase font-semibold">Latest Activity</span><div class="mt-2 flex items-baseline"><span class="text-headline-md font-headline-md font-semibold text-on-surface">Today, 11:40 AM</span></div></div>
+</section>
+<!-- Activity Filter Bar (12px rounded container, white surface, 1px border) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-[12px] flex flex-col md:flex-row items-center justify-between gap-4 px-5 py-3">
+<!-- Search Activity Input -->
+<div class="relative w-full md:w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" data-icon="search">search</span>
+<input class="w-full h-9 pl-9 pr-3 text-body-sm bg-surface-container-lowest text-on-surface placeholder:text-outline border border-outline-variant rounded-[8px] focus:outline-none focus:border-primary focus:ring-0 transition-colors" placeholder="Search audit activity..." type="text">
+</div>
+<!-- Filter Selects -->
+<div class="flex items-center gap-3 w-full md:w-auto flex-wrap justify-end">
+<div class="flex items-center gap-2">
+<label class="text-label-sm text-on-surface-variant">Project:</label>
+<select class="h-9 px-3 pr-8 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-[8px] text-on-surface focus:outline-none focus:border-primary cursor-pointer">
+<option>All Projects</option>
+<option>Community Hall Construction</option>
+<option>PCC Road &amp; Drainage</option>
+<option>High School Laboratory</option>
+<option>Deep Borewell System</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<label class="text-label-sm text-on-surface-variant">Activity:</label>
+<select class="h-9 px-3 pr-8 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-[8px] text-on-surface focus:outline-none focus:border-primary cursor-pointer">
+<option>All Activities</option>
+<option>Duplicate comparison opened</option>
+<option>Cost anomaly reviewed</option>
+<option>Evidence viewed</option>
+<option>Review note added</option>
+<option>Project viewed</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<label class="text-label-sm text-on-surface-variant">Date:</label>
+<select class="h-9 px-3 pr-8 text-body-sm bg-surface-container-lowest border border-outline-variant rounded-[8px] text-on-surface focus:outline-none focus:border-primary cursor-pointer">
+<option>Last 30 Days</option>
+<option>Last 7 Days</option>
+<option>This Quarter</option>
+<option>Financial Year 2023-24</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Main Activity Table Container (12px rounded container, white surface, 1px border, overflow-hidden) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-[12px] overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse table-fixed"><thead><tr class="bg-surface-container-low border-b border-outline-variant h-10 select-none"><th class="px-4 py-2 text-label-sm font-semibold text-on-surface-variant tracking-wider uppercase text-left w-[12%]">Date &amp; Time</th><th class="px-4 py-2 text-label-sm font-semibold text-on-surface-variant tracking-wider uppercase text-left w-[20%]">Activity</th><th class="px-4 py-2 text-label-sm font-semibold text-on-surface-variant tracking-wider uppercase text-left w-[22%]">Project</th><th class="px-4 py-2 text-label-sm font-semibold text-on-surface-variant tracking-wider uppercase text-left w-[16%]">User / Role</th><th class="px-4 py-2 text-label-sm font-semibold text-on-surface-variant tracking-wider uppercase text-left w-[20%]">Details</th><th class="px-4 py-2 text-label-sm font-semibold text-on-surface-variant tracking-wider uppercase text-right w-[10%]">Action</th></tr></thead><tbody class="divide-y divide-surface-container text-body-sm"><!-- Row 1 --><tr class="hover:bg-surface-container-low/60 transition-colors"><td class="px-4 py-3.5 text-on-surface tabular-nums text-left align-top"><div class="font-medium">24 Oct 2023</div><div class="text-[11px] text-on-surface-variant">11:40 AM</div></td><td class="px-4 py-3.5 text-left align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-surface-container border border-outline-variant text-[12px] font-medium text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span>Duplicate comparison opened</span></td><td class="px-4 py-3.5 text-left align-top"><div class="font-medium text-on-surface leading-snug">Community Hall Construction, Ward 12</div><div class="text-[11px] text-on-surface-variant tracking-wide font-mono mt-0.5">MPLADS-GY-2023-881</div></td><td class="px-4 py-3.5 text-on-surface text-[13px] text-left align-top whitespace-nowrap">District Authority (Gaya)</td><td class="px-4 py-3.5 text-on-surface-variant leading-snug text-left align-top">Compared physical boundary overlap against proposed community centre work</td><td class="px-4 py-3.5 text-right align-top whitespace-nowrap"><a class="inline-flex items-center gap-1 text-[13px] font-medium text-on-surface hover:text-black hover:underline group" href="#"><span class="">View project</span><span class="transition-transform group-hover:translate-x-0.5">→</span></a></td></tr><!-- Row 2 --><tr class="hover:bg-surface-container-low/60 transition-colors"><td class="px-4 py-3.5 text-on-surface tabular-nums text-left align-top"><div class="font-medium">24 Oct 2023</div><div class="text-[11px] text-on-surface-variant">10:15 AM</div></td><td class="px-4 py-3.5 text-left align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-[#FEF2F2] border border-[#FECACA] text-[12px] font-medium text-[#991B1B]"><span class="w-1.5 h-1.5 rounded-full bg-[#DC2626]"></span>Cost anomaly reviewed</span></td><td class="px-4 py-3.5 text-left align-top"><div class="font-medium text-on-surface leading-snug">PCC Road &amp; Drainage, Manpur Block</div><div class="text-[11px] text-on-surface-variant tracking-wide font-mono mt-0.5">MPLADS-GY-2023-402</div></td><td class="px-4 py-3.5 text-on-surface text-[13px] text-left align-top whitespace-nowrap">District Authority (Gaya)</td><td class="px-4 py-3.5 text-on-surface-variant leading-snug text-left align-top">Reviewed earthwork rate deviation (+59% above district standard schedule)</td><td class="px-4 py-3.5 text-right align-top whitespace-nowrap"><a class="inline-flex items-center gap-1 text-[13px] font-medium text-on-surface hover:text-black hover:underline group" href="#"><span class="">View project</span><span class="transition-transform group-hover:translate-x-0.5">→</span></a></td></tr><!-- Row 3 --><tr class="hover:bg-surface-container-low/60 transition-colors"><td class="px-4 py-3.5 text-on-surface tabular-nums text-left align-top"><div class="font-medium">23 Oct 2023</div><div class="text-[11px] text-on-surface-variant">04:22 PM</div></td><td class="px-4 py-3.5 text-left align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-surface-container-low border border-outline-variant text-[12px] font-medium text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span>Evidence viewed</span></td><td class="px-4 py-3.5 text-left align-top"><div class="font-medium text-on-surface leading-snug">High School Laboratory Equipment</div><div class="text-[11px] text-on-surface-variant tracking-wide font-mono mt-0.5">MPLADS-GY-2023-109</div></td><td class="px-4 py-3.5 text-on-surface text-[13px] text-left align-top whitespace-nowrap">District Authority (Gaya)</td><td class="px-4 py-3.5 text-on-surface-variant leading-snug text-left align-top">Inspected equipment schedule verification and manufacturer quotation logs</td><td class="px-4 py-3.5 text-right align-top whitespace-nowrap"><a class="inline-flex items-center gap-1 text-[13px] font-medium text-on-surface hover:text-black hover:underline group" href="#"><span class="">View project</span><span class="transition-transform group-hover:translate-x-0.5">→</span></a></td></tr><!-- Row 4 --><tr class="hover:bg-surface-container-low/60 transition-colors"><td class="px-4 py-3.5 text-on-surface tabular-nums text-left align-top"><div class="font-medium">23 Oct 2023</div><div class="text-[11px] text-on-surface-variant">02:05 PM</div></td><td class="px-4 py-3.5 text-left align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-surface-container-low border border-outline-variant text-[12px] font-medium text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span>Review note added</span></td><td class="px-4 py-3.5 text-left align-top"><div class="font-medium text-on-surface leading-snug">Deep Borewell &amp; Solar Pump System</div><div class="text-[11px] text-on-surface-variant tracking-wide font-mono mt-0.5">MPLADS-GY-2023-644</div></td><td class="px-4 py-3.5 text-on-surface text-[13px] text-left align-top whitespace-nowrap">District Authority (Gaya)</td><td class="px-4 py-3.5 text-on-surface-variant leading-snug text-left align-top">Added verification memo regarding geo-tag confirmation for borewell site</td><td class="px-4 py-3.5 text-right align-top whitespace-nowrap"><a class="inline-flex items-center gap-1 text-[13px] font-medium text-on-surface hover:text-black hover:underline group" href="#"><span class="">View project</span><span class="transition-transform group-hover:translate-x-0.5">→</span></a></td></tr><!-- Row 5 --><tr class="hover:bg-surface-container-low/60 transition-colors"><td class="px-4 py-3.5 text-on-surface tabular-nums text-left align-top"><div class="font-medium">22 Oct 2023</div><div class="text-[11px] text-on-surface-variant">05:48 PM</div></td><td class="px-4 py-3.5 text-left align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-surface-container-low border border-outline-variant text-[12px] font-medium text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span>Project viewed</span></td><td class="px-4 py-3.5 text-left align-top"><div class="font-medium text-on-surface leading-snug">Primary Health Centre Extension</div><div class="text-[11px] text-on-surface-variant tracking-wide font-mono mt-0.5">MPLADS-GY-2023-312</div></td><td class="px-4 py-3.5 text-on-surface text-[13px] text-left align-top whitespace-nowrap">District Authority (Gaya)</td><td class="px-4 py-3.5 text-on-surface-variant leading-snug text-left align-top">Accessed baseline sanction details and administrative sanction order</td><td class="px-4 py-3.5 text-right align-top whitespace-nowrap"><a class="inline-flex items-center gap-1 text-[13px] font-medium text-on-surface hover:text-black hover:underline group" href="#"><span class="">View project</span><span class="transition-transform group-hover:translate-x-0.5">→</span></a></td></tr><!-- Row 6 --><tr class="hover:bg-surface-container-low/60 transition-colors"><td class="px-4 py-3.5 text-on-surface tabular-nums text-left align-top"><div class="font-medium">22 Oct 2023</div><div class="text-[11px] text-on-surface-variant">11:30 AM</div></td><td class="px-4 py-3.5 text-left align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-surface-container border border-outline-variant text-[12px] font-medium text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span>Duplicate comparison opened</span></td><td class="px-4 py-3.5 text-left align-top"><div class="font-medium text-on-surface leading-snug">Rural Culvert &amp; Approach Road, Belaganj</div><div class="text-[11px] text-on-surface-variant tracking-wide font-mono mt-0.5">MPLADS-GY-2023-773</div></td><td class="px-4 py-3.5 text-on-surface text-[13px] text-left align-top whitespace-nowrap">District Authority (Gaya)</td><td class="px-4 py-3.5 text-on-surface-variant leading-snug text-left align-top">Cross-referenced road length and parcel alignment with 2021 sanctioned scheme</td><td class="px-4 py-3.5 text-right align-top whitespace-nowrap"><a class="inline-flex items-center gap-1 text-[13px] font-medium text-on-surface hover:text-black hover:underline group" href="#"><span class="">View project</span><span class="transition-transform group-hover:translate-x-0.5">→</span></a></td></tr><!-- Row 7 --><tr class="hover:bg-surface-container-low/60 transition-colors"><td class="px-4 py-3.5 text-on-surface tabular-nums text-left align-top"><div class="font-medium">21 Oct 2023</div><div class="text-[11px] text-on-surface-variant">03:15 PM</div></td><td class="px-4 py-3.5 text-left align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-[#FEF2F2] border border-[#FECACA] text-[12px] font-medium text-[#991B1B]"><span class="w-1.5 h-1.5 rounded-full bg-[#DC2626]"></span>Cost anomaly reviewed</span></td><td class="px-4 py-3.5 text-left align-top"><div class="font-medium text-on-surface leading-snug">Solar Street Lighting Phase II, Tekari</div><div class="text-[11px] text-on-surface-variant tracking-wide font-mono mt-0.5">MPLADS-GY-2023-520</div></td><td class="px-4 py-3.5 text-on-surface text-[13px] text-left align-top whitespace-nowrap">District Authority (Gaya)</td><td class="px-4 py-3.5 text-on-surface-variant leading-snug text-left align-top">Evaluated luminaire unit pricing against state benchmark schedule</td><td class="px-4 py-3.5 text-right align-top whitespace-nowrap"><a class="inline-flex items-center gap-1 text-[13px] font-medium text-on-surface hover:text-black hover:underline group" href="#"><span class="">View project</span><span class="transition-transform group-hover:translate-x-0.5">→</span></a></td></tr><!-- Row 8 --><tr class="hover:bg-surface-container-low/60 transition-colors"><td class="px-4 py-3.5 text-on-surface tabular-nums text-left align-top"><div class="font-medium">21 Oct 2023</div><div class="text-[11px] text-on-surface-variant">09:50 AM</div></td><td class="px-4 py-3.5 text-left align-top"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] bg-surface-container-low border border-outline-variant text-[12px] font-medium text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span>Evidence viewed</span></td><td class="px-4 py-3.5 text-left align-top"><div class="font-medium text-on-surface leading-snug">Anganwadi Centre Construction, Bodh Gaya</div><div class="text-[11px] text-on-surface-variant tracking-wide font-mono mt-0.5">MPLADS-GY-2023-294</div></td><td class="px-4 py-3.5 text-on-surface text-[13px] text-left align-top whitespace-nowrap">District Authority (Gaya)</td><td class="px-4 py-3.5 text-on-surface-variant leading-snug text-left align-top">Reviewed civil foundation documentation and site inspection notes</td><td class="px-4 py-3.5 text-right align-top whitespace-nowrap"><a class="inline-flex items-center gap-1 text-[13px] font-medium text-on-surface hover:text-black hover:underline group" href="#"><span class="">View project</span><span class="transition-transform group-hover:translate-x-0.5">→</span></a></td></tr></tbody></table>
+</div>
+<!-- Pagination Bar -->
+<div class="px-5 py-3 bg-surface-container-lowest border-t border-outline-variant flex items-center justify-between">
+<div class="text-label-sm text-on-surface-variant tabular-nums">
+            Showing <span class="font-medium text-on-surface">1–8</span> of <span class="font-medium text-on-surface">28</span> audit activities
+          </div>
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 text-body-sm font-medium border border-outline-variant rounded-[8px] bg-surface-container-low text-outline cursor-not-allowed" disabled="" type="button">
+              Previous
+            </button>
+<button class="h-8 px-3 text-body-sm font-medium border border-outline-variant rounded-[8px] bg-surface-container-lowest text-on-surface hover:bg-surface-container transition-colors shadow-sm" type="button">
+              Next
+            </button>
+</div>
+</div>
+</section>
+<!-- Institutional Attribution Footer -->
+<footer class="pt-4 pb-8 flex flex-col items-center justify-center text-center">
+<p class="text-[12px] text-on-surface-variant leading-relaxed">
+          National Informatics Centre · Ministry of Statistics and Programme Implementation
+        </p>
+<p class="text-[11px] text-outline mt-0.5">
+          Government of India · Sovereign Administrative Portal for Scheme Monitoring &amp; Oversight
+        </p>
+</footer>
+</main>
+</div>
+
+
+</body></html>

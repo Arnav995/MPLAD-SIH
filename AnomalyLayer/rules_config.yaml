@@ -145,3 +145,96 @@ rules:
     max_delta_abs: 2000
     weight: 15
 
+# ==============================================================================
+# Layer 3: Forensic Semantic Disambiguation & Anti-False-Positive Engine
+# ==============================================================================
+layer3_disambiguation:
+  description: "Starter heuristic configuration for entity extraction, domain boilerplate pruning, and forensic typology."
+  # STARTER HEURISTIC SCOPE NOTE:
+  # This phrase catalog is a starter heuristic list scoped to public works descriptions in Nagpur, Pune, and Wardha.
+  # When ingesting new constituencies or annual data batches with different clerical conventions, auditors should
+  # extend this list rather than altering the detection engine code.
+  boilerplate_phrases:
+    - "construction of cement concrete road and drain from"
+    - "construction of cement concrete road and drain"
+    - "construction of cement concrete road from"
+    - "construction of cement concrete road at"
+    - "construction of cement road and drain from"
+    - "construction of cement road from"
+    - "construction of cc road with i-block and drainage system from"
+    - "construction of cc flooring road from"
+    - "cosntruction of cc flooring road from"
+    - "construction of road with drainage from"
+    - "cosntruction of road with drainage from"
+    - "construction of road at"
+    - "construction of cement road at"
+    - "construction of concrete road with drain under"
+    - "construction of cement road with drain under"
+    - "installation of cement concrete benches at various places under gram panchayat"
+    - "installation of cement concrete benches for citizens to sit in public places in"
+    - "installation of cement concrete benches for citizens to sit"
+    - "installation of cement concrete benches at various places under"
+    - "installation of cement concrete benches"
+    - "providing artificial limbs to the disabled person of wardha district"
+    - "providing artificial limbs to the disabled person in wardha district"
+    - "providing artificial limbs to the disabled person"
+    - "in pune lok sabha constituency"
+    - "pune lok sabha constituency"
+    - "ta dist wardha"
+    - "ta. dist. wardha"
+    - "ta.dist. wardha"
+    - "dist. wardha"
+    - "dist wardha"
+    - "district wardha"
+    - "ta. ashti"
+    - "ta ashti"
+    - "t selu"
+    - "taluka deoli"
+    - "ta. deoli"
+    - "amravati district"
+    - "dist. amravati"
+    - "at various places under"
+    - "at various places"
+    - "erection of a meeting pavilion on municipal corporation land at"
+    - "erection of a meeting pavilion on the municipal corporation's land at"
+    - "construction of a library building on municipal corporation land at"
+    - "construction of a library on municipal corporation land at"
+    - "construction of a bus stop at"
+    - "construction of a bus stop near"
+    - "upgradation of toilets and related works in"
+    - "laying of drainage lines"
+
+# ==============================================================================
+# Layer 2: Cost Anomaly Normalization & Parity Framework (Workstream 2 Hook)
+# ==============================================================================
+layer2_cost_normalization:
+  enabled: false  # DORMANT: Kept disabled until official MoSPI WPI / State PWD DSR gazettes are verified
+  status: "ASSUMED — UNVERIFIED, needs sourcing"
+  base_fy: "2024-25"
+
+  # Safety bounds to prevent runaway deflation from laundering tail-end overpricing
+  min_deflator_multiplier: 0.70
+  max_deflator_multiplier: 1.50
+
+  # Neutral baseline multipliers (1.000). To be updated ONLY when specific
+  # MoSPI / DPIIT WPI series or State PWD DSR documents are opened and cited.
+  inflation_indices:
+    "2024-25": 1.000
+    "2025-26": 1.000  # UNVERIFIED
+    "2026-27": 1.000  # UNVERIFIED
+
+  # Geographic cost indices keyed by implementing authority (IDA_NAME).
+  # Note: Ramtek (SC) constituency operates under NAGPUR_IDA (District Collector Nagpur).
+  geographic_cost_indices:
+    "PUNE(DISTRICT COLLECTOR PUNE_IDA)": 1.000      # UNVERIFIED
+    "NAGPUR(DISTRICT COLLECTOR NAGPUR_IDA)": 1.000  # UNVERIFIED (covers Nagpur and Ramtek)
+    "WARDHA(DISTRICT COLLECTOR WARDHA_IDA)": 1.000  # UNVERIFIED
+    "AMRAVATI(DISTRICT COLLECTOR AMRAVATI_IDA)": 1.000 # UNVERIFIED
+    "DEFAULT": 1.000
+  # Physical scale quantity ceilings to prevent runaway regex matches from laundering overpricing
+  scale_quantity_ceilings:
+    benches: 500
+    computers: 100
+    borewells: 10
+
+

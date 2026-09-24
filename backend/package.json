@@ -21,8 +21,8 @@
     "risk:inspect-cost-distribution": "tsx scripts/inspect-cost-distribution.ts",
     "risk:consistency": "tsx scripts/run-consistency-detection.ts",
     "risk:assessment": "tsx scripts/run-risk-assessment.ts",
-    "risk:ml": "tsx scripts/run-ml-pipeline.ts"
-  },
+    "risk:ml": "tsx scripts/run-ml-pipeline.ts",
+"benford": "tsx scripts/run-benford.ts"  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -39,9 +39,11 @@
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "axios": "^1.20.0",
+    "axios-cookiejar-support": "^7.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "tough-cookie": "^6.0.2"
   }
 }

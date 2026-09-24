@@ -1,0 +1,201 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>MPLADS-Sentinel — Ministry Tier-2 Digest</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-container-highest": "#e1e2e4",
+          "on-secondary-fixed-variant": "#005228",
+          "on-surface": "#191c1e",
+          "tertiary-fixed-dim": "#ffb77d",
+          "surface-container-high": "#e7e8ea",
+          "secondary": "#006d37",
+          "surface": "#f8f9fb",
+          "primary": "#000000",
+          "secondary-fixed": "#66fe9c",
+          "background": "#f8f9fb",
+          "inverse-on-surface": "#f0f1f3",
+          "on-tertiary-container": "#c76c00",
+          "inverse-surface": "#2e3132",
+          "secondary-fixed-dim": "#44e183",
+          "error": "#ba1a1a",
+          "outline-variant": "#c4c7c7",
+          "primary-container": "#1c1b1b",
+          "tertiary": "#000000",
+          "tertiary-fixed": "#ffdcc3",
+          "surface-container-low": "#f3f4f6",
+          "on-primary-fixed-variant": "#474646",
+          "surface-tint": "#5f5e5e",
+          "on-secondary-container": "#00743b",
+          "on-primary-container": "#858383",
+          "surface-container-lowest": "#ffffff",
+          "primary-fixed-dim": "#c8c6c5",
+          "on-error": "#ffffff",
+          "surface-dim": "#d9dadc",
+          "on-error-container": "#93000a",
+          "secondary-container": "#66fe9c",
+          "on-secondary": "#ffffff",
+          "primary-fixed": "#e5e2e1",
+          "on-surface-variant": "#444748",
+          "surface-variant": "#e1e2e4",
+          "surface-bright": "#f8f9fb",
+          "on-background": "#191c1e",
+          "on-secondary-fixed": "#00210d",
+          "on-primary-fixed": "#1c1b1b",
+          "surface-container": "#edeef0",
+          "on-tertiary-fixed": "#2f1500",
+          "error-container": "#ffdad6",
+          "on-tertiary": "#ffffff",
+          "inverse-primary": "#c8c6c5",
+          "tertiary-container": "#2f1500",
+          "on-tertiary-fixed-variant": "#6e3900",
+          "outline": "#747878",
+          "on-primary": "#ffffff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "gutter": "1rem",
+          "space-md": "1rem",
+          "margin-tablet": "1.5rem",
+          "space-xl": "2rem",
+          "gutter-desktop": "1.5rem",
+          "margin": "1rem",
+          "margin-desktop": "2rem",
+          "space-xxl": "3rem",
+          "space-sm": "0.5rem",
+          "space-lg": "1.5rem",
+          "space-xs": "0.25rem"
+        },
+        "fontFamily": {
+          "label-md": ["Inter"],
+          "body-lg": ["Inter"],
+          "headline-lg": ["Inter"],
+          "numeric-metric": ["Inter"],
+          "label-sm": ["Inter"],
+          "headline-md": ["Inter"],
+          "body-sm": ["Inter"],
+          "display-lg-mobile": ["Inter"],
+          "body-md": ["Inter"],
+          "display-lg": ["Inter"],
+          "headline-sm": ["Inter"]
+        },
+        "fontSize": {
+          "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+          "body-lg": ["15px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }],
+          "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+          "numeric-metric": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.025em", "fontWeight": "500" }],
+          "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+          "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+          "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+          "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+          "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+          "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+          "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+        }
+      }
+    }
+  }
+  </script>
+<style>
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col selection:bg-surface-container-high">
+<!-- ========================================================================= -->
+<!-- SIDE NAVIGATION (Desktop: 256px / fixed left) -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 bottom-0 left-0 w-64 h-full bg-surface-container-lowest border-r border-surface-container-high flex flex-col justify-between z-30 select-none">
+<div class="flex flex-col">
+<!-- Institutional Brand Header -->
+<div class="px-space-lg py-space-lg border-b border-surface-container-high">
+<div class="flex items-center gap-space-sm mb-space-xs">
+<!-- National Emblem / Emblem Seal Placeholder representation -->
+<div class="w-7 h-7 bg-primary flex items-center justify-center text-on-primary rounded">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm tracking-tight text-on-surface block leading-tight">MPLADS-Sentinel</span>
+</div>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant leading-tight">Ministry of Statistics and Programme Implementation</p>
+</div>
+<!-- Primary Oversight Navigation -->
+<div class="px-space-md pt-space-md">
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-on-surface-variant block px-space-sm mb-space-xs font-semibold">Primary Oversight</span>
+<nav class="space-y-1"><a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150" href="#"><svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg><span class="text-body-sm font-medium">National Overview</span></a><a class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-primary text-on-primary font-medium transition-colors duration-150 shadow-none" href="#"><svg class="w-4 h-4 flex-shrink-0 text-on-primary" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg><span class="text-body-sm font-semibold text-on-primary">Tier-2 Digest</span></a><a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150" href="#"><svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg><span class="text-body-sm font-medium">Benford's Law</span></a><a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150" href="#"><svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg><span class="text-body-sm font-medium">Projects</span></a></nav>
+</div>
+<!-- Governance & Audit Section -->
+<div class="px-space-md pt-space-lg">
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-on-surface-variant block px-space-sm mb-space-xs font-semibold">Governance &amp; Audit</span>
+<nav class="space-y-1"><a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150" href="#"><svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg><span class="text-body-sm font-medium">Ministry Oversight</span></a><a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150" href="#"><svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span class="text-body-sm font-medium">Audit Logs</span></a><a class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors duration-150" href="#"><svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3"></circle></svg><span class="text-body-sm font-medium">System Settings</span></a></nav>
+<div class="mt-space-md px-space-sm">
+<button class="w-full flex items-center justify-center gap-2 py-2 px-3 border border-surface-container-high bg-surface-container-lowest text-on-surface hover:bg-surface-container-low text-label-md font-medium rounded-lg transition-colors duration-150" type="button"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg><span class="">New Audit Report</span></button>
+</div>
+</div>
+</div>
+<!-- Session & Identity Footer -->
+<div class="p-space-md border-t border-surface-container-high bg-surface"><div class="flex items-center justify-between"><div class="truncate"><p class="text-body-sm font-body-sm font-medium text-on-surface truncate">Ministry Directorate Officer</p><p class="text-label-sm font-label-sm text-on-surface-variant">Ministry Oversight</p></div><span class="bg-surface-container-high text-on-surface text-label-sm font-label-sm px-2 py-0.5 rounded">Active</span></div></div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP APP BAR / HEADER (ml-64) -->
+<!-- ========================================================================= -->
+<header class="ml-64 h-14 bg-surface-container-lowest border-b border-surface-container-high px-space-lg flex items-center justify-between sticky top-0 z-20"><div class="flex items-center gap-space-sm w-96"><div class="relative w-full"><span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-on-surface-variant"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path></svg></span><input class="w-full pl-9 pr-3 py-1.5 bg-surface-container-lowest border border-surface-container-high text-on-surface placeholder:text-on-surface-variant rounded-lg text-body-sm focus:outline-none focus:border-primary transition-colors" placeholder="Search constituency, state or project identifier..." type="text"></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-1 border-r border-surface-container-high pr-space-md"><button aria-label="Notifications" class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" type="button"><span class="material-symbols-outlined">notifications</span></button><button aria-label="Help &amp; Documentation" class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" type="button"><span class="material-symbols-outlined">help_outline</span></button></div><div class="flex items-center gap-2"><button class="px-3 py-1.5 border border-surface-container-high bg-surface-container-lowest text-on-surface hover:bg-surface-container-low text-label-md font-medium rounded-lg transition-colors duration-150 flex items-center gap-1.5" type="button"><span class="material-symbols-outlined text-[16px]">terminal</span><span class="">System Log</span></button><button class="px-3.5 py-1.5 bg-primary text-on-primary hover:bg-primary-container text-label-md font-medium rounded-lg transition-colors duration-150 flex items-center gap-1.5 shadow-none" type="button"><span class="material-symbols-outlined text-[16px]">file_download</span><span class="">Export Report</span></button></div></div></header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE / CONTENT CANVAS (ml-64) -->
+<!-- ========================================================================= -->
+<main class="ml-64 flex-1 p-space-lg space-y-space-lg max-w-[1600px]">
+<!-- Title & Operational Scope Header -->
+<div class="border-b border-surface-container-high pb-space-md"><div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2"><div><div class="flex items-center gap-2 mb-1.5"><span class="text-label-sm uppercase tracking-widest text-on-surface-variant font-semibold">MOSPI Administrative Gateway</span><span class="text-on-surface-variant">•</span><span class="text-label-sm uppercase tracking-widest text-on-surface-variant">Curated Review Queue</span></div><h1 class="text-display-lg font-display-lg tracking-tight text-on-surface">Tier-2 Digest</h1><p class="text-body-md text-on-surface-variant mt-1.5">Priority projects selected for Ministry review.</p></div><div class="text-right self-start md:self-center"><div class="inline-flex items-center gap-2 bg-surface-container-lowest border border-surface-container-high px-3 py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="text-label-sm text-on-surface-variant font-medium">Latest available analysis</span></div></div></div><div class="mt-4 p-3 bg-surface-container-lowest border border-surface-container-high rounded-lg flex items-center justify-between gap-3"><div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-on-surface-variant text-[18px]">info</span><div class="text-body-sm text-on-surface-variant"><span class="font-medium text-on-surface">Curated weekly review queue.</span> <span class="text-on-surface-variant">Not an exhaustive list of all flagged projects.</span></div></div></div></div>
+<!-- ========================================================================= -->
+<!-- METRIC STRIP & RISK DISTRIBUTION DUAL PANEL -->
+<!-- ========================================================================= -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-md"><div class="xl:col-span-7 bg-surface-container-lowest border border-surface-container-high rounded-xl p-space-md flex flex-col justify-between"><div><div class="text-headline-sm font-semibold text-on-surface">Weekly Triage Summary</div><p class="text-label-sm text-on-surface-variant mt-0.5 mb-space-md">Curated weekly triage snapshot</p></div><div class="grid grid-cols-5 divide-x divide-surface-container-high py-space-xs"><div class="pr-space-md"><div class="text-numeric-metric font-numeric-metric text-on-surface tabular-nums leading-none font-semibold">18</div><div class="text-label-sm font-semibold text-on-surface mt-2">Priority projects</div></div><div class="px-space-md"><div class="text-numeric-metric font-numeric-metric text-[#ef4444] tabular-nums leading-none font-semibold">5</div><div class="text-label-sm font-semibold text-[#ef4444] mt-2">High risk</div></div><div class="px-space-md"><div class="text-numeric-metric font-numeric-metric text-on-surface tabular-nums leading-none font-semibold">9</div><div class="text-label-sm font-semibold text-on-surface mt-2">Medium risk</div></div><div class="px-space-md"><div class="text-numeric-metric font-numeric-metric text-on-surface-variant tabular-nums leading-none font-semibold">4</div><div class="text-label-sm font-semibold text-on-surface-variant mt-2">Low risk</div></div><div class="pl-space-md"><div class="text-numeric-metric font-numeric-metric text-on-surface tabular-nums leading-none font-semibold">7</div><div class="text-label-sm font-semibold text-on-surface mt-2">Categories</div></div></div></div><div class="xl:col-span-5 bg-surface-container-lowest border border-surface-container-high rounded-xl p-space-md flex flex-col justify-between"><div><div class="flex items-center justify-between mb-1"><span class="text-headline-sm font-semibold text-on-surface">Risk distribution</span><span class="text-label-sm text-on-surface-variant tabular-nums font-medium">18 evaluated projects</span></div><p class="text-label-sm text-on-surface-variant mb-space-md">Breakdown across evaluated thresholds</p></div><div class="w-full space-y-3"><div class="h-3.5 w-full bg-surface-container-low rounded-full overflow-hidden flex"><div class="bg-[#ef4444] h-full" style="width: 27.8%;" title="High Risk: 5 Projects (28%)"></div><div class="bg-[#747878] h-full border-l border-surface-container-lowest" style="width: 50%;" title="Medium Risk: 9 Projects (50%)"></div><div class="bg-[#c4c7c7] h-full border-l border-surface-container-lowest" style="width: 22.2%;" title="Low Risk: 4 Projects (22%)"></div></div><div class="flex items-center justify-between text-body-sm pt-1"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span><span class="font-medium text-on-surface text-label-sm">High</span><span class="text-on-surface-variant tabular-nums text-label-sm">5 (28%)</span></div><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#747878]"></span><span class="font-medium text-on-surface text-label-sm">Medium</span><span class="text-on-surface-variant tabular-nums text-label-sm">9 (50%)</span></div><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#c4c7c7]"></span><span class="font-medium text-on-surface text-label-sm">Low</span><span class="text-on-surface-variant tabular-nums text-label-sm">4 (22%)</span></div></div></div></div></div>
+<!-- ========================================================================= -->
+<!-- FEATURED HIGH-RISK PROJECT CALLOUT -->
+<!-- ========================================================================= -->
+<div class="bg-surface-container-lowest border border-surface-container-high border-l-4 border-l-[#ef4444] rounded-xl px-space-md py-space-sm transition-shadow"><div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2"><div class="flex items-center gap-2"><span class="bg-[#fef2f2] text-[#b91c1c] border border-[#fecaca] text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-full font-semibold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#ef4444]"></span>HIGHEST PRIORITY</span><span class="text-label-sm text-on-surface-variant font-medium">Maharashtra · Nagpur · Health &amp; Sanitation</span></div><div class="text-label-sm text-on-surface-variant font-mono tabular-nums">P-2024-8819</div></div><div class="flex flex-col md:flex-row md:items-center justify-between gap-4"><div><h2 class="text-headline-sm font-semibold text-on-surface">Community Healthcare Centre — Phase II</h2><p class="text-body-sm text-on-surface-variant mt-0.5">Cost substantially above comparable projects.</p></div><div class="flex-shrink-0"><a class="inline-flex items-center gap-1.5 px-3 py-1.5 border border-surface-container-high bg-surface-container-lowest hover:bg-surface-container-low text-on-surface text-label-md font-medium rounded-lg transition-colors duration-150" href="#"><span class="">View project</span><span class="material-symbols-outlined text-[15px]">arrow_forward</span></a></div></div></div>
+<!-- Table Footer / Pagination -->
+<!-- FILTER TOOLBAR & CONTROLS -->
+<!-- ========================================================================= -->
+<div class="bg-surface-container-lowest border border-surface-container-high rounded-xl p-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm"><div class="flex flex-wrap items-center gap-space-sm w-full md:w-auto flex-1"><div class="relative min-w-[280px] flex-1 md:flex-initial"><span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-on-surface-variant"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path></svg></span><input class="w-full pl-9 pr-space-sm py-1.5 bg-surface-container-lowest border border-surface-container-high text-on-surface placeholder:text-on-surface-variant rounded-lg text-body-sm focus:outline-none focus:border-primary" placeholder="Search projects..." type="text"></div><div class="relative"><select class="appearance-none bg-surface-container-lowest border border-surface-container-high rounded-lg text-body-sm py-1.5 pl-3 pr-8 text-on-surface focus:outline-none focus:border-primary cursor-pointer"><option>All Risk Levels</option><option>High Risk</option><option>Medium Risk</option><option>Low Risk</option></select><span class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">expand_more</span></span></div><div class="relative"><select class="appearance-none bg-surface-container-lowest border border-surface-container-high rounded-lg text-body-sm py-1.5 pl-3 pr-8 text-on-surface focus:outline-none focus:border-primary cursor-pointer"><option>All States</option><option>Maharashtra</option><option>Bihar</option><option>Uttar Pradesh</option><option>Karnataka</option><option>Rajasthan</option><option>Odisha</option></select><span class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">expand_more</span></span></div><div class="relative"><select class="appearance-none bg-surface-container-lowest border border-surface-container-high rounded-lg text-body-sm py-1.5 pl-3 pr-8 text-on-surface focus:outline-none focus:border-primary cursor-pointer"><option>All Categories</option><option>Health &amp; Sanitation</option><option>Public Infrastructure</option><option>Roads &amp; Bridges</option><option>Education</option><option>Renewable Energy</option></select><span class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">expand_more</span></span></div></div><div class="text-label-sm text-on-surface-variant flex-shrink-0 self-end md:self-center pr-space-xs font-medium"><span class="font-semibold text-on-surface tabular-nums">5</span> prioritized projects</div></div>
+<!-- ========================================================================= -->
+<!-- MAIN PROJECT REVIEW TABLE -->
+<!-- ========================================================================= -->
+<div class="bg-surface-container-lowest border border-surface-container-high rounded-xl overflow-hidden"><div class="px-space-md py-3 border-b border-surface-container-high flex items-center justify-between bg-surface"><div><h3 class="text-headline-sm font-semibold text-on-surface">Priority projects</h3><p class="text-label-sm text-on-surface-variant">Selected from the latest analysis for Ministry-level review.</p></div><div class="flex items-center gap-space-xs"><button class="p-1.5 hover:bg-surface-container-low rounded-lg text-on-surface-variant transition-colors" title="Refresh queue" type="button"><span class="material-symbols-outlined text-[16px]">refresh</span></button></div></div><div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead><tr class="bg-surface-container-low border-b border-surface-container-high text-on-surface-variant"><th class="py-3 px-space-md text-label-sm uppercase tracking-wider font-semibold w-[24%]">Project</th><th class="py-3 px-space-md text-label-sm uppercase tracking-wider font-semibold w-[14%]">Location</th><th class="py-3 px-space-md text-label-sm uppercase tracking-wider font-semibold w-[13%]">Category</th><th class="py-3 px-space-md text-label-sm uppercase tracking-wider font-semibold w-[10%]">Risk</th><th class="py-3 px-space-md text-label-sm uppercase tracking-wider font-semibold w-[25%]">Why Flagged</th><th class="py-3 px-space-md text-label-sm uppercase tracking-wider font-semibold w-[8%] text-right">Updated</th><th class="py-3 px-space-md text-label-sm uppercase tracking-wider font-semibold w-[6%] text-right">Action</th></tr></thead><tbody class="divide-y divide-surface-container-high text-body-sm"><tr class="hover:bg-surface transition-colors"><td class="py-3 px-space-md"><div class="font-medium text-on-surface leading-snug">Community Healthcare Centre — Phase II</div><div class="text-label-sm text-on-surface-variant font-mono tabular-nums">P-2024-8819</div></td><td class="py-3 px-space-md text-on-surface">Maharashtra, Nagpur</td><td class="py-3 px-space-md text-on-surface-variant">Health &amp; Sanitation</td><td class="py-3 px-space-md"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-semibold bg-[#fef2f2] text-[#b91c1c] border border-[#fecaca]"><span class="w-1.5 h-1.5 rounded-full bg-[#ef4444]"></span>High</span></td><td class="py-3 px-space-md text-on-surface leading-normal">Cost above comparable projects</td><td class="py-3 px-space-md text-right text-on-surface-variant whitespace-nowrap text-label-sm">2 days ago</td><td class="py-3 px-space-md text-right whitespace-nowrap"><a class="text-primary font-medium hover:underline text-label-md inline-flex items-center gap-0.5" href="#">View <span class="material-symbols-outlined text-[13px]">arrow_forward</span></a></td></tr><tr class="hover:bg-surface transition-colors"><td class="py-3 px-space-md"><div class="font-medium text-on-surface leading-snug">Rural Drinking Water &amp; Sanitation Hub</div><div class="text-label-sm text-on-surface-variant font-mono tabular-nums">P-2024-4102</div></td><td class="py-3 px-space-md text-on-surface">Bihar, Gaya</td><td class="py-3 px-space-md text-on-surface-variant">Public Infrastructure</td><td class="py-3 px-space-md"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-semibold bg-[#fef2f2] text-[#b91c1c] border border-[#fecaca]"><span class="w-1.5 h-1.5 rounded-full bg-[#ef4444]"></span>High</span></td><td class="py-3 px-space-md text-on-surface leading-normal">Repeated expenditure detected</td><td class="py-3 px-space-md text-right text-on-surface-variant whitespace-nowrap text-label-sm">4 days ago</td><td class="py-3 px-space-md text-right whitespace-nowrap"><a class="text-primary font-medium hover:underline text-label-md inline-flex items-center gap-0.5" href="#">View <span class="material-symbols-outlined text-[13px]">arrow_forward</span></a></td></tr><tr class="hover:bg-surface transition-colors"><td class="py-3 px-space-md"><div class="font-medium text-on-surface leading-snug">Stormwater Drainage &amp; Culvert Network</div><div class="text-label-sm text-on-surface-variant font-mono tabular-nums">P-2023-5512</div></td><td class="py-3 px-space-md text-on-surface">West Bengal, Murshidabad</td><td class="py-3 px-space-md text-on-surface-variant">Roads &amp; Bridges</td><td class="py-3 px-space-md"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-semibold bg-[#fef2f2] text-[#b91c1c] border border-[#fecaca]"><span class="w-1.5 h-1.5 rounded-full bg-[#ef4444]"></span>High</span></td><td class="py-3 px-space-md text-on-surface leading-normal">Potential duplicate work</td><td class="py-3 px-space-md text-right text-on-surface-variant whitespace-nowrap text-label-sm">5 days ago</td><td class="py-3 px-space-md text-right whitespace-nowrap"><a class="text-primary font-medium hover:underline text-label-md inline-flex items-center gap-0.5" href="#">View <span class="material-symbols-outlined text-[13px]">arrow_forward</span></a></td></tr><tr class="hover:bg-surface transition-colors"><td class="py-3 px-space-md"><div class="font-medium text-on-surface leading-snug">Inter-Village Access Road</div><div class="text-label-sm text-on-surface-variant font-mono tabular-nums">P-2023-9120</div></td><td class="py-3 px-space-md text-on-surface">Uttar Pradesh, Varanasi</td><td class="py-3 px-space-md text-on-surface-variant">Roads &amp; Bridges</td><td class="py-3 px-space-md"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-semibold bg-surface-container-low text-on-surface-variant border border-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-[#747878]"></span>Medium</span></td><td class="py-3 px-space-md text-on-surface leading-normal">Unusual milestone pattern</td><td class="py-3 px-space-md text-right text-on-surface-variant whitespace-nowrap text-label-sm">1 week ago</td><td class="py-3 px-space-md text-right whitespace-nowrap"><a class="text-primary font-medium hover:underline text-label-md inline-flex items-center gap-0.5" href="#">View <span class="material-symbols-outlined text-[13px]">arrow_forward</span></a></td></tr><tr class="hover:bg-surface transition-colors"><td class="py-3 px-space-md"><div class="font-medium text-on-surface leading-snug">District Library &amp; Resource Hub</div><div class="text-label-sm text-on-surface-variant font-mono tabular-nums">P-2024-3011</div></td><td class="py-3 px-space-md text-on-surface">Karnataka, Belagavi</td><td class="py-3 px-space-md text-on-surface-variant">Education</td><td class="py-3 px-space-md"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-semibold bg-surface-container-low text-on-surface-variant border border-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-[#747878]"></span>Medium</span></td><td class="py-3 px-space-md text-on-surface leading-normal">Timeline variance detected</td><td class="py-3 px-space-md text-right text-on-surface-variant whitespace-nowrap text-label-sm">1 week ago</td><td class="py-3 px-space-md text-right whitespace-nowrap"><a class="text-primary font-medium hover:underline text-label-md inline-flex items-center gap-0.5" href="#">View <span class="material-symbols-outlined text-[13px]">arrow_forward</span></a></td></tr></tbody></table></div><div class="px-space-md py-space-sm border-t border-surface-container-high bg-surface flex flex-col sm:flex-row items-center justify-between text-body-sm text-on-surface-variant gap-2"><span class="text-label-sm">Showing 1–5 of 18 records</span><div class="flex items-center gap-1"><button class="px-3 py-1 border border-surface-container-high bg-surface-container-lowest text-on-surface-variant opacity-50 rounded-lg text-label-sm cursor-not-allowed" disabled="" type="button">Previous</button><span class="px-2 text-label-sm text-on-surface font-semibold">1</span><button class="px-3 py-1 border border-surface-container-high bg-surface-container-lowest text-on-surface hover:bg-surface-container-low rounded-lg text-label-sm" type="button">Next</button></div></div></div>
+<!-- ========================================================================= -->
+<!-- ========================================================================= -->
+<!-- MAIN PROJECT REVIEW TABLE -->
+<div class="pt-space-xs"><a href="#" class="text-label-md text-on-surface-variant hover:text-on-surface hover:underline inline-flex items-center gap-1 font-medium"><span class="">How triage is determined</span><span class="material-symbols-outlined text-[14px]">arrow_forward</span></a></div>
+<!-- ========================================================================= -->
+<!-- Table Footer / Pagination -->
+<!-- ========================================================================= -->
+<footer class="pt-space-lg pb-space-xl border-t border-surface-container-high mt-space-xl text-center md:text-left flex flex-col md:flex-row justify-between items-center text-label-sm font-label-sm text-on-surface-variant gap-2"><div class="text-center w-full">National Informatics Centre · Ministry of Statistics and Programme Implementation</div></footer>
+</main>
+</body></html>

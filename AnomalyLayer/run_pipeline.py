@@ -103,9 +103,8 @@ def run_orchestrator(mock: bool = False, config_path: str = "config.yaml", rules
             print(f"        -> [{v['rule_id']}] {v['description']}")
 
     # ---- Step 4: Layer 2 Peer Cost Anomaly Detection ----
-    print("\n[4/7] LAYER 2: PEER-GROUP COST ANOMALY DETECTION (Isolation Forest + IQR Fallback)...")
-    df_enriched = detect_cost_anomalies(df_scored, only_sanctioned=True)
-    df_enriched["cost_anomaly_reason"] = df_enriched.apply(build_cost_reason_string, axis=1)
+    print("\n[4/7] LAYER 2: PEER-GROUP COST ANOMALY DETECTION (Functional Activity & Scale Normalization)...")
+    df_enriched = detect_cost_anomalies(df_scored, only_sanctioned=True, config_path=rules_path)
 
     evaluated_n = (df_enriched["cost_anomaly_method"] != "not_evaluated").sum()
     pending_n = (df_enriched["cost_anomaly_method"] == "not_evaluated").sum()
@@ -115,15 +114,20 @@ def run_orchestrator(mock: bool = False, config_path: str = "config.yaml", rules
     print(f"  Method breakdown: {dict(df_enriched['cost_anomaly_method'].value_counts())}")
     print(f"  Flagged cost anomalies: {len(flagged_cost)} ({len(flagged_cost)/max(evaluated_n, 1)*100:.1f}% of evaluated)")
 
+    # Functional activity breakdown
+    act_counts = dict(df_enriched["classified_activity"].value_counts())
+    print(f"  Functional Activity Clusters: {act_counts}")
+
     if not flagged_cost.empty:
-        print("\n  Top Cost Anomalies (Deviation from Category Median):")
+        print("\n  Top Cost Anomalies (Deviation from Activity Median):")
         top_cost = flagged_cost.sort_values("cost_anomaly_score", ascending=False).head(5)
         for _, row in top_cost.iterrows():
-            print(f"    * ID {row['WORK_RECOMMENDATION_DTL_ID']} ({row.get('CONSTITUENCY', 'N/A')}) | Category: {row.get('WORK_CATEGORY')} | Sanction: Rs {row.get('SANCTION_AMOUNT', 0):,.0f}")
+            act = row.get("classified_activity", row.get("WORK_CATEGORY"))
+            print(f"    * ID {row['WORK_RECOMMENDATION_DTL_ID']} ({row.get('CONSTITUENCY', 'N/A')}) | Activity: [{act}] | Sanction: Rs {row.get('SANCTION_AMOUNT', 0):,.0f}")
             print(f"        -> [{row['cost_anomaly_method']}] {row['cost_anomaly_reason']}")
 
-    # ---- Step 5: Layer 3 Semantic Duplicate & Overlap Detection ----
-    print("\n[5/7] LAYER 3: SEMANTIC DUPLICATE & OVERLAP PROPOSAL DETECTION (Sentence-BERT)...")
+    # ---- Step 5: Layer 3 Forensic Semantic Disambiguation Engine ----
+    print("\n[5/7] LAYER 3: FORENSIC SEMANTIC DISAMBIGUATION & ANTI-FALSE-POSITIVE ENGINE...")
     from duplicate_detection import find_duplicate_candidates
     dup_df = find_duplicate_candidates(df_enriched, similarity_threshold=0.85, max_days_apart=180)
     
@@ -131,10 +135,16 @@ def run_orchestrator(mock: bool = False, config_path: str = "config.yaml", rules
     if not dup_df.empty:
         safe_to_csv(dup_df, dup_path)
         print(f"  Saved {len(dup_df)} duplicate candidate pairs -> {dup_path}")
+
+        typ_counts = dict(dup_df["match_typology"].value_counts())
+        print(f"  * Forensic Typology Breakdown: {typ_counts}")
+        high_conv = dup_df[dup_df["match_typology"].isin(["TRUE_DUPLICATE", "CONTRACT_TRANCHE_SPLIT"])]
+        print(f"  * High-Conviction Actionable Pairs (TRUE_DUPLICATE / CONTRACT_TRANCHE_SPLIT): {len(high_conv)}")
         
         # Annotate df_enriched with duplicate candidate signals
-        flagged_ids = set(dup_df["WORK_RECOMMENDATION_DTL_ID_A"].dropna().tolist() + 
-                          dup_df["WORK_RECOMMENDATION_DTL_ID_B"].dropna().tolist())
+        actionable_pairs = dup_df[dup_df["match_typology"].isin(["TRUE_DUPLICATE", "CONTRACT_TRANCHE_SPLIT", "UNRESOLVED_SIMILAR_WORK"])]
+        flagged_ids = set(actionable_pairs["WORK_RECOMMENDATION_DTL_ID_A"].dropna().tolist() + 
+                          actionable_pairs["WORK_RECOMMENDATION_DTL_ID_B"].dropna().tolist())
         df_enriched["is_duplicate_candidate"] = df_enriched["WORK_RECOMMENDATION_DTL_ID"].isin(flagged_ids)
         
         dup_scores = {}
@@ -145,9 +155,10 @@ def run_orchestrator(mock: bool = False, config_path: str = "config.yaml", rules
                 
         df_enriched["duplicate_candidate_score"] = df_enriched["WORK_RECOMMENDATION_DTL_ID"].map(dup_scores).fillna(0.0)
         
-        print("\n  Top Semantic Duplicate / Overlap Candidates:")
-        for _, r in dup_df.head(5).iterrows():
-            print(f"    * Pair: ID {r['WORK_RECOMMENDATION_DTL_ID_A']} <-> ID {r['WORK_RECOMMENDATION_DTL_ID_B']} ({r['district']})")
+        print("\n  Top High-Conviction Candidates (Ranked by Suspicion Score):")
+        top_display = high_conv if not high_conv.empty else dup_df
+        for _, r in top_display.head(5).iterrows():
+            print(f"    * [{r['match_typology']}] Pair: ID {r['WORK_RECOMMENDATION_DTL_ID_A']} <-> ID {r['WORK_RECOMMENDATION_DTL_ID_B']} ({r['district']})")
             print(f"        Similarity: {r['text_similarity']*100:.1f}% | Days apart: {r['days_apart']} | Suspicion Score: {r['duplicate_suspicion_score']:.3f}")
             print(f"        -> {r['reason']}")
     else:

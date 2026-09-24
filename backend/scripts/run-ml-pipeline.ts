@@ -3,33 +3,37 @@ import "dotenv/config";
 import { runMlPipeline } from "../src/services/ml/ml-pipeline.service.js";
 
 async function main() {
-  console.log("Starting ML risk pipeline...");
+  console.log("=================================");
+  console.log("MPLADS-SENTINEL ML PIPELINE");
+  console.log("=================================\n");
 
   const result = await runMlPipeline();
 
-  console.log("");
-  console.log("ML pipeline completed.");
-  console.log(`Projects evaluated: ${result.summary.projects}`);
-  console.log(`Tier 2: ${result.summary.tier_2}`);
-  console.log(`Tier 1: ${result.summary.tier_1}`);
-  console.log(`Clean: ${result.summary.clean}`);
+  console.log("\nML evaluation complete.");
+  console.log(`Projects evaluated : ${result.summary.projects}`);
+  console.log(`Tier 2            : ${result.summary.tier_2}`);
+  console.log(`Tier 1            : ${result.summary.tier_1}`);
+  console.log(`Clean             : ${result.summary.clean}`);
   console.log(
-    `Duplicate candidates: ${result.duplicate_candidates.length}`,
+    `Duplicate pairs   : ${result.duplicate_candidates.length}`
   );
 
-  console.log("");
-  console.log("Database persistence completed.");
-  console.log(`Risk assessments: ${result.persisted.projectsPersisted}`);
-  console.log(`Risk signals: ${result.persisted.riskSignalsPersisted}`);
+  console.log("\nDatabase persistence");
   console.log(
-    `Duplicate candidates: ${result.persisted.duplicateCandidatesPersisted}`,
+    `Risk assessments  : ${result.persisted.projectsPersisted}`
   );
+  console.log(
+    `Risk signals      : ${result.persisted.riskSignalsPersisted}`
+  );
+  console.log(
+    `Duplicate records : ${result.persisted.duplicateCandidatesPersisted}`
+  );
+
+  console.log("\nPipeline completed successfully.");
 }
 
 main().catch((error) => {
-  console.error("");
-  console.error("ML pipeline failed:");
+  console.error("\nML pipeline failed:");
   console.error(error);
-
   process.exit(1);
 });

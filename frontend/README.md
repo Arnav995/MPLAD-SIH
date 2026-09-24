@@ -1,2 +1,0 @@
-# MPLADS Sentinel Frontend
-

@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>MPLADS Portal - Duplicate Detection</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary-fixed-variant": "#6e3900",
+            "on-secondary-fixed-variant": "#005228",
+            "on-tertiary-fixed": "#2f1500",
+            "on-error": "#ffffff",
+            "on-secondary-container": "#00743b",
+            "surface-container-low": "#f3f4f6",
+            "primary-fixed": "#e5e2e1",
+            "on-primary": "#ffffff",
+            "surface-tint": "#5f5e5e",
+            "secondary": "#006d37",
+            "secondary-fixed": "#66fe9c",
+            "tertiary-fixed-dim": "#ffb77d",
+            "tertiary-container": "#2f1500",
+            "on-surface-variant": "#444748",
+            "primary-fixed-dim": "#c8c6c5",
+            "outline-variant": "#c4c7c7",
+            "surface-container": "#edeef0",
+            "surface-container-highest": "#e1e2e4",
+            "surface-bright": "#f8f9fb",
+            "primary-container": "#1c1b1b",
+            "on-surface": "#191c1e",
+            "on-secondary-fixed": "#00210d",
+            "tertiary-fixed": "#ffdcc3",
+            "primary": "#000000",
+            "inverse-surface": "#2e3132",
+            "tertiary": "#000000",
+            "on-primary-fixed": "#1c1b1b",
+            "inverse-primary": "#c8c6c5",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#e1e2e4",
+            "on-primary-fixed-variant": "#474646",
+            "surface-dim": "#d9dadc",
+            "on-tertiary": "#ffffff",
+            "secondary-fixed-dim": "#44e183",
+            "surface": "#f8f9fb",
+            "on-background": "#191c1e",
+            "background": "#f8f9fb",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-container": "#c76c00",
+            "secondary-container": "#66fe9c",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#f0f1f3",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#858383",
+            "outline": "#747878",
+            "surface-container-high": "#e7e8ea"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin-tablet": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "margin-desktop": "2rem",
+            "space-xxl": "3rem",
+            "margin": "1rem",
+            "space-xl": "2rem",
+            "gutter-desktop": "1.5rem",
+            "gutter": "1rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-lg-mobile": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "numeric-metric": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400"}],
+            "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+            "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+            "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+            "display-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "body-sm": ["13px", {"lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400"}],
+            "body-lg": ["15px", {"lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400"}],
+            "numeric-metric": ["30px", {"lineHeight": "36px", "letterSpacing": "-0.025em", "fontWeight": "500"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+            "headline-sm": ["16px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .symbol-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen flex">
+<!-- SIDEBAR NAVIGATION SHELL (Shared Component Anchor) -->
+<aside class="fixed top-0 left-0 h-screen w-64 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant z-30 shrink-0">
+<!-- Top Branding & Navigation Items -->
+<div>
+<!-- Header / Crest -->
+<div class="p-4 border-b border-surface-container">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded border border-outline-variant bg-surface-container-low flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="account_balance">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight leading-tight">MPLADS Portal</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">District Authority Oversight</span>
+</div>
+</div>
+</div>
+<!-- Main Nav Tabs -->
+<nav class="p-3 space-y-1">
+<!-- 1. District Overview -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+<span class="">District Overview</span>
+</a>
+<!-- 2. Project Verification -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="fact_check">fact_check</span>
+<span class="">Project Verification</span>
+</a>
+<!-- 3. Duplicate Detection (ACTIVE TAB) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-primary text-on-primary rounded font-label-md text-label-md shadow-sm" href="#">
+<span class="material-symbols-outlined text-lg symbol-fill" data-icon="content_copy">content_copy</span>
+<span class="">Duplicate Detection</span>
+</a>
+<!-- 4. Cost Anomalies -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="monitoring">monitoring</span>
+<span class="">Cost Anomalies</span>
+</a>
+<!-- 5. Audit Logs -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="history_edu">history_edu</span>
+<span class="">Audit Logs</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Anchored Utility & DM Profile -->
+<div class="mt-auto px-4 pb-4 pt-3 border-t border-outline-variant flex flex-col gap-1"><nav class="space-y-1"><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors text-label-md font-label-md" href="#"><span class="material-symbols-outlined text-lg" data-icon="settings">settings</span><span class="">Settings</span></a><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors text-label-md font-label-md" href="#"><span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span><span class="">Support</span></a></nav><div class="mt-3 pt-3 border-t border-surface-container flex items-center gap-3 px-1"><div class="w-8 h-8 rounded bg-primary text-on-primary flex items-center justify-center font-label-md font-bold text-xs shrink-0 tracking-wider">DM</div><div class="flex flex-col min-w-0"><span class="text-sm font-semibold text-on-surface truncate">District Magistrate</span><span class="text-xs text-on-surface-variant truncate">Gaya District, Bihar</span></div></div></div>
+</aside>
+<!-- MAIN VIEWPORT CANVAS (offset by 256px sidebar) -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TOP GLOBAL HEADER (Shared Component Anchor) -->
+<header class="docked full-width top-0 h-14 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-8 sticky z-20">
+<!-- Search on Left -->
+<div class="relative w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base" data-icon="search">search</span>
+<input class="w-full h-8 pl-9 pr-3 bg-surface-container-lowest border border-outline-variant font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:border-primary focus:ring-0 focus:outline-none transition-colors rounded-lg" placeholder="Search projects, reference codes, or locations..." type="text">
+</div>
+<!-- Actions & Status on Right -->
+<div class="flex items-center gap-4">
+<!-- Status Pill -->
+<div class="inline-flex items-center gap-2 px-2.5 py-1 bg-surface-container-low border border-outline-variant rounded">
+<span class="w-2 h-2 rounded-full bg-[#06C167]"></span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">District Authority</span>
+</div>
+<!-- Trailing Icon Actions -->
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-lg" data-icon="notifications">notifications</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded transition-colors" title="Help">
+<span class="material-symbols-outlined text-lg" data-icon="help">help</span>
+</button>
+<!-- Primary Action -->
+<button class="h-8 px-3 inline-flex items-center gap-1.5 bg-surface-container-lowest border border-outline-variant hover:border-outline text-on-surface font-label-sm text-label-sm transition-colors font-medium rounded-lg">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+<span class="">Export Review Dossier</span>
+</button>
+</div>
+</header>
+<!-- CONTENT BODY -->
+<main class="flex-1 p-8 max-w-7xl w-full mx-auto space-y-6">
+<!-- PAGE HEADER -->
+<div>
+<nav class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant mb-1">
+<span class="">MPLADS</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="">District Oversight</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface">Gaya District</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-on-surface">Duplicate Detection</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Review projects with overlapping scope, location, or related proposal characteristics.</p>
+</div>
+
+</div>
+</div>
+<!-- 1. SUMMARY STRIP (Compact, restrained horizontal metric strip) -->
+<section class="bg-surface-container-lowest border border-outline-variant divide-y sm:divide-y-0 sm:divide-x divide-outline-variant grid grid-cols-2 sm:grid-cols-4 rounded-xl">
+<div class="px-5 py-3.5 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Potential Duplicates</span>
+<span class="font-numeric-metric text-numeric-metric font-semibold text-on-surface mt-0.5 tabular-nums">12</span>
+</div>
+<div class="px-5 py-3.5 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Projects Involved</span>
+<span class="font-numeric-metric text-numeric-metric font-semibold text-on-surface mt-0.5 tabular-nums">19</span>
+</div>
+<div class="px-5 py-3.5 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">High Priority</span>
+<span class="font-numeric-metric text-numeric-metric font-semibold text-[#dc2626] mt-0.5 tabular-nums">4</span>
+</div>
+<div class="px-5 py-3.5 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Pending Review</span>
+<span class="font-numeric-metric text-numeric-metric font-semibold text-on-surface mt-0.5 tabular-nums">8</span>
+</div>
+</section>
+<!-- 2. SEARCH & FILTER BAR -->
+<section class="bg-surface-container-lowest border border-outline-variant p-3 flex flex-wrap items-center justify-between gap-3 rounded-xl">
+<!-- Search Input -->
+<div class="relative flex-1 min-w-[240px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base" data-icon="search">search</span>
+<input class="w-full h-9 pl-9 pr-3 bg-surface-container-lowest border border-outline-variant font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:border-primary focus:ring-0 focus:outline-none transition-colors rounded-lg" placeholder="Search duplicate cases..." type="text">
+</div>
+<!-- Filter Controls Group -->
+<div class="flex items-center flex-wrap gap-2.5">
+<!-- Risk Segmented Control -->
+<div class="inline-flex items-center p-0.5 bg-surface-container-low border border-outline-variant h-9 rounded-lg">
+<span class="px-2.5 py-1 text-xs font-medium text-on-surface-variant">Risk:</span>
+<button class="px-2.5 py-1 text-xs font-semibold bg-surface-container-lowest text-on-surface border border-outline-variant shadow-xs rounded">All</button>
+<button class="px-2.5 py-1 text-xs font-medium text-on-surface-variant hover:text-on-surface">High</button>
+<button class="px-2.5 py-1 text-xs font-medium text-on-surface-variant hover:text-on-surface">Medium</button>
+<button class="px-2.5 py-1 text-xs font-medium text-on-surface-variant hover:text-on-surface">Low</button>
+</div>
+<!-- Category Select -->
+<div class="relative">
+<select class="h-9 pl-3 pr-8 bg-surface-container-lowest border border-outline-variant font-body-sm text-body-sm text-on-surface focus:border-primary focus:ring-0 focus:outline-none appearance-none cursor-pointer rounded-lg">
+<option>Category: All</option>
+<option>Community Infrastructure</option>
+<option>Drinking Water &amp; Sanitation</option>
+<option>Roads &amp; Connectivity</option>
+<option>Public Health Facilities</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-base" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+<!-- Detection Type Select -->
+<div class="relative">
+<select class="h-9 pl-3 pr-8 bg-surface-container-lowest border border-outline-variant font-body-sm text-body-sm text-on-surface focus:border-primary focus:ring-0 focus:outline-none appearance-none cursor-pointer rounded-lg">
+<option>Detection Type: All</option>
+<option>Duplicate Anomaly</option>
+<option>Overlapping Scope</option>
+<option>Repeated Asset Installation</option>
+<option>Similar Work in Same Area</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-base" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+</div>
+</section>
+<!-- 3. DUPLICATE CASE LIST (Core Workspace) -->
+<section class="space-y-4"><article class="bg-surface-container-lowest border border-outline-variant overflow-hidden shadow-xs rounded-xl"><div class="px-6 py-4 border-b border-surface-container-low flex items-center justify-between"><div class="flex items-center gap-3"><span class="font-mono text-xs font-semibold tracking-wider uppercase px-2.5 py-1 bg-surface-container-low border border-outline-variant text-on-surface rounded">DUPLICATE ANOMALY</span><span class="text-xs font-mono text-on-surface-variant">CASE-GY-0042</span></div><div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium text-[#dc2626] bg-[#FEF2F2] border border-[#FECACA] rounded"><span class="w-1.5 h-1.5 rounded-full bg-[#dc2626]"></span><span class="">High Priority</span></div></div><div class="px-7 py-6 grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between"><div><span class="font-mono text-xs font-semibold tracking-wide uppercase text-on-surface-variant block mb-2">CURRENT PROJECT · SANCTIONED</span><h3 class="text-lg font-bold text-on-surface leading-snug mb-1">Construction of Community Hall, Ward 12</h3><span class="font-mono text-xs text-on-surface-variant block mb-4">MPLADS-GY-2023-881</span></div><div class="pt-3 border-t border-surface-container space-y-2.5"><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Location</span><span class="text-on-surface font-medium">Tekari Block, Gaya</span></div><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Category</span><span class="text-on-surface font-medium">Community Infrastructure</span></div><div class="flex justify-between items-baseline pt-2 border-t border-surface-container"><span class="text-xs text-on-surface-variant font-medium">Sanctioned Amount</span><span class="text-lg font-bold text-on-surface tabular-nums">₹24,50,000</span></div></div></div><div class="bg-[#FEF2F2]/40 border border-[#FECACA]/60 rounded-lg p-6 flex flex-col justify-between"><div><span class="inline-block font-mono text-xs font-semibold tracking-wider uppercase text-[#dc2626] bg-[#FEF2F2] border border-[#FECACA] px-2 py-0.5 rounded mb-2">RELATED PROJECT · PROPOSED</span><h3 class="text-lg font-bold text-on-surface leading-snug mb-1">Public Meeting Facility &amp; Panchayat Hall</h3><span class="font-mono text-xs text-on-surface-variant block mb-4">MPLADS-GY-2023-914</span></div><div class="pt-3 border-t border-[#FECACA]/60 space-y-2.5"><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Location</span><span class="text-on-surface font-medium">Tekari Central Ward 12, Gaya</span></div><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Category</span><span class="text-on-surface font-medium">Community Infrastructure</span></div><div class="flex justify-between items-baseline pt-2 border-t border-[#FECACA]/60"><span class="text-xs text-on-surface-variant font-medium">Proposed Amount</span><span class="text-lg font-bold text-on-surface tabular-nums">₹22,80,000</span></div></div></div></div><div class="px-7 py-4 bg-surface-container-low border-t border-surface-container flex flex-col md:flex-row md:items-center justify-between gap-4"><div><div class="font-mono text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2.5">WHY THEY APPEAR RELATED</div><div class="flex flex-wrap items-center gap-x-6 gap-y-2"><div class="flex items-center gap-2 text-sm text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-[#06C167] shrink-0"></span><span class="">Same cadastral parcel: Tekari Ward 12 plot 401/A</span></div><div class="flex items-center gap-2 text-sm text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-[#dc2626] shrink-0"></span><span class="">Overlapping scope: Community hall structural footprint &amp; boundary</span></div><div class="flex items-center gap-2 text-sm text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-outline shrink-0"></span><span class="">Concurrent state grant proposal filed within 60 days</span></div></div></div><a class="inline-flex items-center gap-1.5 font-body-sm text-sm font-semibold text-primary hover:text-on-surface-variant transition-colors shrink-0" href=""><span class="">Compare projects</span><span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span></a></div></article><article class="bg-surface-container-lowest border border-outline-variant overflow-hidden shadow-xs rounded-xl"><div class="px-6 py-4 border-b border-surface-container-low flex items-center justify-between"><div class="flex items-center gap-3"><span class="font-mono text-xs font-semibold tracking-wider uppercase px-2.5 py-1 bg-surface-container-low border border-outline-variant text-on-surface rounded">REPEATED ASSET INSTALLATION</span><span class="text-xs font-mono text-on-surface-variant">CASE-GY-0045</span></div><div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium text-[#dc2626] bg-[#FEF2F2] border border-[#FECACA] rounded"><span class="w-1.5 h-1.5 rounded-full bg-[#dc2626]"></span><span class="">High Priority</span></div></div><div class="px-7 py-6 grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between"><div><span class="font-mono text-xs font-semibold tracking-wide uppercase text-on-surface-variant block mb-2">CURRENT PROJECT · SANCTIONED</span><h3 class="text-lg font-bold text-on-surface leading-snug mb-1">Installation of Deep Tube Well &amp; RO Plant</h3><span class="font-mono text-xs text-on-surface-variant block mb-4">MPLADS-GY-2023-956</span></div><div class="pt-3 border-t border-surface-container space-y-2.5"><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Location</span><span class="text-on-surface font-medium">Bodhan Bigha Village, Gaya</span></div><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Category</span><span class="text-on-surface font-medium">Drinking Water &amp; Sanitation</span></div><div class="flex justify-between items-baseline pt-2 border-t border-surface-container"><span class="text-xs text-on-surface-variant font-medium">Sanctioned Amount</span><span class="text-lg font-bold text-on-surface tabular-nums">₹12,80,000</span></div></div></div><div class="bg-[#FEF2F2]/40 border border-[#FECACA]/60 rounded-lg p-6 flex flex-col justify-between"><div><span class="inline-block font-mono text-xs font-semibold tracking-wider uppercase text-[#dc2626] bg-[#FEF2F2] border border-[#FECACA] px-2 py-0.5 rounded mb-2">RELATED PROJECT · PROPOSED</span><h3 class="text-lg font-bold text-on-surface leading-snug mb-1">Community Solar Drinking Water Unit</h3><span class="font-mono text-xs text-on-surface-variant block mb-4">MPLADS-GY-2023-982</span></div><div class="pt-3 border-t border-[#FECACA]/60 space-y-2.5"><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Location</span><span class="text-on-surface font-medium">Bodhan Bigha Ward 3, Gaya</span></div><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Category</span><span class="text-on-surface font-medium">Drinking Water &amp; Sanitation</span></div><div class="flex justify-between items-baseline pt-2 border-t border-[#FECACA]/60"><span class="text-xs text-on-surface-variant font-medium">Proposed Amount</span><span class="text-lg font-bold text-on-surface tabular-nums">₹11,40,000</span></div></div></div></div><div class="px-7 py-4 bg-surface-container-low border-t border-surface-container flex flex-col md:flex-row md:items-center justify-between gap-4"><div><div class="font-mono text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2.5">WHY THEY APPEAR RELATED</div><div class="flex flex-wrap items-center gap-x-6 gap-y-2"><div class="flex items-center gap-2 text-sm text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-[#06C167] shrink-0"></span><span class="">Same location: Bodhan Bigha Primary School premises</span></div><div class="flex items-center gap-2 text-sm text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-[#dc2626] shrink-0"></span><span class="">Overlapping scope: Redundant water purification boring site</span></div><div class="flex items-center gap-2 text-sm text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-outline shrink-0"></span><span class="">Identical target yield (1000 LPH filtration output)</span></div></div></div><a class="inline-flex items-center gap-1.5 font-body-sm text-sm font-semibold text-primary hover:text-on-surface-variant transition-colors shrink-0" href=""><span class="">Compare projects</span><span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span></a></div></article><article class="bg-surface-container-lowest border border-outline-variant overflow-hidden shadow-xs rounded-xl"><div class="px-6 py-4 border-b border-surface-container-low flex items-center justify-between"><div class="flex items-center gap-3"><span class="font-mono text-xs font-semibold tracking-wider uppercase px-2.5 py-1 bg-surface-container-low border border-outline-variant text-on-surface rounded">OVERLAPPING SCOPE</span><span class="text-xs font-mono text-on-surface-variant">CASE-GY-0048</span></div><div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-medium text-[#dc2626] bg-[#FEF2F2] border border-[#FECACA] rounded"><span class="w-1.5 h-1.5 rounded-full bg-[#dc2626]"></span><span class="">High Priority</span></div></div><div class="px-7 py-6 grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col justify-between"><div><span class="font-mono text-xs font-semibold tracking-wide uppercase text-on-surface-variant block mb-2">CURRENT PROJECT · SANCTIONED</span><h3 class="text-lg font-bold text-on-surface leading-snug mb-1">Construction of CC Road from Main Road to Harijan Tola</h3><span class="font-mono text-xs text-on-surface-variant block mb-4">MPLADS-GY-2023-742</span></div><div class="pt-3 border-t border-surface-container space-y-2.5"><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Location</span><span class="text-on-surface font-medium">Manpur Block, Gaya</span></div><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Category</span><span class="text-on-surface font-medium">Roads &amp; Connectivity</span></div><div class="flex justify-between items-baseline pt-2 border-t border-surface-container"><span class="text-xs text-on-surface-variant font-medium">Sanctioned Amount</span><span class="text-lg font-bold text-on-surface tabular-nums">₹22,40,000</span></div></div></div><div class="bg-[#FEF2F2]/40 border border-[#FECACA]/60 rounded-lg p-6 flex flex-col justify-between"><div><span class="inline-block font-mono text-xs font-semibold tracking-wider uppercase text-[#dc2626] bg-[#FEF2F2] border border-[#FECACA] px-2 py-0.5 rounded mb-2">RELATED PROJECT · PROPOSED</span><h3 class="text-lg font-bold text-on-surface leading-snug mb-1">Pavement &amp; Drainage Works on Harijan Tola Link Road</h3><span class="font-mono text-xs text-on-surface-variant block mb-4">MPLADS-GY-2023-779</span></div><div class="pt-3 border-t border-[#FECACA]/60 space-y-2.5"><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Location</span><span class="text-on-surface font-medium">Manpur Block, Gaya</span></div><div class="flex justify-between text-xs"><span class="text-on-surface-variant">Category</span><span class="text-on-surface font-medium">Roads &amp; Connectivity</span></div><div class="flex justify-between items-baseline pt-2 border-t border-[#FECACA]/60"><span class="text-xs text-on-surface-variant font-medium">Proposed Amount</span><span class="text-lg font-bold text-on-surface tabular-nums">₹18,90,000</span></div></div></div></div><div class="px-7 py-4 bg-surface-container-low border-t border-surface-container flex flex-col md:flex-row md:items-center justify-between gap-4"><div><div class="font-mono text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2.5">WHY THEY APPEAR RELATED</div><div class="flex flex-wrap items-center gap-x-6 gap-y-2"><div class="flex items-center gap-2 text-sm text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-[#06C167] shrink-0"></span><span class="">Same corridor: Manpur Harijan Tola link corridor chainage 0/0 to 1/2</span></div><div class="flex items-center gap-2 text-sm text-on-surface"><span class="w-1.5 h-1.5 rounded-full bg-[#dc2626] shrink-0"></span><span class="">Overlapping scope: Concrete paving segment overlaps by 420 meters</span></div><div class="flex items-center gap-2 text-sm text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-outline shrink-0"></span><span class="">Identical implementing agency division proposed</span></div></div></div><a class="inline-flex items-center gap-1.5 font-body-sm text-sm font-semibold text-primary hover:text-on-surface-variant transition-colors shrink-0" href=""><span class="">Compare projects</span><span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span></a></div></article></section>
+<!-- 4. PAGINATION -->
+<section class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 pb-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing <span class="font-medium text-on-surface">1–3</span> of <span class="font-medium text-on-surface">12</span> duplicate cases</span>
+<div class="inline-flex items-center gap-2">
+<button class="h-9 px-3 inline-flex items-center gap-1 border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low text-body-sm font-medium transition-colors disabled:opacity-50 rounded-lg" disabled="">
+<span class="material-symbols-outlined text-base" data-icon="chevron_left">chevron_left</span>
+<span class="">Previous</span>
+</button>
+<div class="inline-flex items-center gap-1 font-mono text-xs text-on-surface-variant px-2">
+<span class="font-semibold text-on-surface">1</span>
+<span class="">/</span>
+<span class="">3</span>
+</div>
+<button class="h-9 px-3 inline-flex items-center gap-1 border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low text-body-sm font-medium transition-colors rounded-lg">
+<span class="">Next</span>
+<span class="material-symbols-outlined text-base" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</section>
+</main>
+<!-- INSTITUTIONAL FOOTER -->
+<footer class="mt-auto border-t border-outline-variant bg-surface-container-lowest px-8 py-4"><div class="max-w-7xl mx-auto flex items-center justify-center text-xs text-on-surface-variant font-label-sm py-1"><span class="">National Informatics Centre · Ministry of Statistics and Programme Implementation</span></div></footer>
+</div>
+
+
+</body></html>

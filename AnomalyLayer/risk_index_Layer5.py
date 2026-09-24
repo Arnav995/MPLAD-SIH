@@ -109,20 +109,38 @@ def aggregate_duplicate_pairs_to_projects(
     id_col_b: str = "WORK_RECOMMENDATION_DTL_ID_B",
     score_col: str = "duplicate_suspicion_score",
     reason_col: str = "reason",
+    typology_col: str = "match_typology",
 ) -> dict:
     """
     A project can appear in multiple candidate pairs. This takes the MAX
-    suspicion score across all pairs involving a given project, and keeps
-    a reference to which other project(s) it was paired with, for the
-    explainability trail. Returns {WORK_RECOMMENDATION_DTL_ID: {...}}.
+    suspicion score across all pairs involving a given project, tracks the
+    most severe match_typology, and keeps a reference to paired project(s)
+    for the explainability trail. Returns {WORK_RECOMMENDATION_DTL_ID: {...}}.
     """
     if duplicate_pairs_df is None or duplicate_pairs_df.empty:
         return {}
 
+    typology_priority = {
+        "TRUE_DUPLICATE": 5,
+        "CONTRACT_TRANCHE_SPLIT": 4,
+        "UNRESOLVED_SIMILAR_WORK": 3,
+        "ADJACENT_SEGMENT_UNCORROBORATED": 2,
+        "INDEPENDENT_PARALLEL_WORKS": 1,
+    }
+
     per_project = {}
     for _, row in duplicate_pairs_df.iterrows():
+        typology = row.get(typology_col) if typology_col in row else None
         for this_id, other_id in [(row[id_col_a], row[id_col_b]), (row[id_col_b], row[id_col_a])]:
-            entry = per_project.setdefault(this_id, {"score": 0.0, "paired_with": [], "reason": None})
+            entry = per_project.setdefault(
+                this_id,
+                {"score": 0.0, "typology": typology or "UNRESOLVED_SIMILAR_WORK", "paired_with": [], "reason": None}
+            )
+            curr_prio = typology_priority.get(entry.get("typology"), 0)
+            new_prio = typology_priority.get(typology, 0)
+            if new_prio > curr_prio or row[score_col] > entry["score"]:
+                if typology:
+                    entry["typology"] = typology
             if row[score_col] > entry["score"]:
                 entry["score"] = row[score_col]
                 entry["reason"] = row[reason_col]
@@ -191,8 +209,9 @@ def compute_risk_index(
 
     df = compute_fast_track_signal(df)
 
-    dup_agg = aggregate_duplicate_pairs_to_projects(duplicate_pairs_df, ) if duplicate_pairs_df is not None else {}
+    dup_agg = aggregate_duplicate_pairs_to_projects(duplicate_pairs_df) if duplicate_pairs_df is not None else {}
     df["duplicate_score"] = df[id_col].map(lambda i: dup_agg.get(i, {}).get("score"))
+    df["duplicate_typology"] = df[id_col].map(lambda i: dup_agg.get(i, {}).get("typology"))
     df["duplicate_paired_with"] = df[id_col].map(lambda i: dup_agg.get(i, {}).get("paired_with"))
     df["duplicate_reason_raw"] = df[id_col].map(lambda i: dup_agg.get(i, {}).get("reason"))
 
@@ -228,13 +247,20 @@ def compute_risk_index(
             anchors.add("COST_OUTLIER")
         if row.get("fast_track_flag"):
             anchors.add("FAST_TRACK_SANCTION")
-        # Duplicate anchor: requires high similarity (>= 0.92) AND excludes routine small-unit
-        # bulk grants (< Rs 1 Lakh or bulk categories) where high NLP similarity is normal administrative behavior
+
+        # Duplicate anchor: gated on forensic match_typology
+        # Only promoted if TRUE_DUPLICATE or CONTRACT_TRANCHE_SPLIT (score >= 0.90),
+        # or UNRESOLVED_SIMILAR_WORK meeting the high threshold (>= 0.92).
+        # Crucially: INDEPENDENT_PARALLEL_WORKS and ADJACENT_SEGMENT_UNCORROBORATED are EXCLUDED from anchors.
+        dup_typology = row.get("duplicate_typology")
         is_bulk_item = (
             (row.get("SANCTION_AMOUNT") is not None and pd.notna(row.get("SANCTION_AMOUNT")) and row.get("SANCTION_AMOUNT") < BULK_UNIT_COST_CEILING)
             or str(row.get("WORK_CATEGORY", "")).upper() in BULK_DISTRIBUTION_CATEGORIES
         )
-        if dup_component is not None and dup_component >= DUPLICATE_ANCHOR_THRESHOLD:
+        if dup_typology in ("TRUE_DUPLICATE", "CONTRACT_TRANCHE_SPLIT") and dup_component is not None and dup_component >= 0.90:
+            if not is_bulk_item:
+                anchors.add("DUPLICATE_WORK_OVERLAP")
+        elif dup_typology in ("UNRESOLVED_SIMILAR_WORK", None) and dup_component is not None and dup_component >= DUPLICATE_ANCHOR_THRESHOLD:
             if not is_bulk_item:
                 anchors.add("DUPLICATE_WORK_OVERLAP")
 
@@ -244,7 +270,8 @@ def compute_risk_index(
             signal_types_present += 1
         if cost_component is not None and row.get("cost_anomaly_flag"):
             signal_types_present += 1
-        if dup_component is not None and dup_component >= 0.5:  # a weak dup match shouldn't count as a full signal
+        # Capped / filtered: INDEPENDENT_PARALLEL_WORKS never counts toward the corroboration gate
+        if dup_component is not None and dup_component >= 0.50 and dup_typology != "INDEPENDENT_PARALLEL_WORKS":
             signal_types_present += 1
         if row.get("fast_track_flag"):
             signal_types_present += 1
@@ -260,12 +287,16 @@ def compute_risk_index(
         # --- reason assembly ---
         reasons = [v["description"] for v in (row.get("rule_violations") or [])]
         if row.get("cost_anomaly_flag"):
-            median = row.get("category_median")
-            amt = row.get("SANCTION_AMOUNT")
-            if pd.notna(median) and median:
-                ratio = amt / median
-                reasons.append(f"Sanction amount is {ratio:.1f}x the category median "
-                                f"({row.get('cost_anomaly_method')}, n={row.get('category_sample_size')})")
+            cost_r = row.get("cost_anomaly_reason")
+            if cost_r:
+                reasons.append(cost_r)
+            else:
+                median = row.get("category_median")
+                amt = row.get("SANCTION_AMOUNT")
+                if pd.notna(median) and median:
+                    ratio = amt / median
+                    reasons.append(f"Sanction amount is {ratio:.1f}x the category median "
+                                    f"({row.get('cost_anomaly_method')}, n={row.get('category_sample_size')})")
         if row.get("fast_track_flag"):
             reasons.append(f"Sanctioned in {row.get('days_to_sanction')} days — unusually fast "
                             f"relative to this district's own typical timeline")

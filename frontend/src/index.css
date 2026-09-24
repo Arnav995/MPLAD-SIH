@@ -1,5 +1,59 @@
-html, body, #root { min-height: 100%; margin: 0; }
-body { font-family: Inter, sans-serif; background: #f8f9fb; color: #191c1e; }
-* { box-sizing: border-box; }
-button, input, select, textarea { font: inherit; }
-.stitch-page-root { min-height: 100vh; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ 
+@layer utilities {
+  .num-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .font-numeric-metric {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    line-height: 36px; 
+    letter-spacing: -0.025em;
+    font-weight: 500;
+  }
+}
+
+/* Custom scrollbar for data tables and sidebars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c4c7c7;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #747878;
+}
+
+.critical-badge {
+  animation: criticalBadgePulse 2.4s ease-in-out infinite;
+}
+
+@keyframes criticalBadgePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(186, 26, 26, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 0 3px rgba(186, 26, 26, 0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .critical-badge {
+    animation: none;
+  }
+}
