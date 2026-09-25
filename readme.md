@@ -6,7 +6,6 @@ AI-assisted monitoring and risk analysis platform for MPLADS (Members of Parliam
 
 MPLADS Sentinel ingests project and expenditure data from the eSAKSHI ecosystem, normalizes it into a relational data model, evaluates projects for potential risk signals, and exposes the results through REST APIs and role-oriented dashboards.
 
-The current MVP focuses on explainable project-level risk assessment rather than attempting to automate government audit decisions.
 
 ### Features
 
@@ -32,6 +31,7 @@ The system currently focuses on:
 - Project lifecycle tracking
 - Cross-stage rule checks
 - Cost anomaly detection
+- Benford Analysis
 - Duplicate/overlap detection
 - Composite project risk scoring
 - Explainable risk reasons
