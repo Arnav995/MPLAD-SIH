@@ -168,6 +168,6 @@ Frontend → `http://localhost:3000`
 ## Author
 
 **Arnav Gandhi**  
-B.Tech CSE, Thapar Institute of Engineering & Technology
+      B.Tech COE, Thapar Institute of Engineering & Technology
 
 > Academic project demonstrating AI-assisted detection of duplicate public works and financial irregularities using public MPLADS data.
