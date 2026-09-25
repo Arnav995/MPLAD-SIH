@@ -716,38 +716,75 @@ async function persistMlResults(
   const finalDuplicateRows =
     [...uniqueDuplicateRows.values()];
 
-    await prisma.$transaction(
-    async (tx) => {
-      await tx.riskSignal.deleteMany({});
+    // await prisma.$transaction(
+    // async (tx) => {
+    //   await tx.riskSignal.deleteMany({});
 
-      await tx.riskAssessment.deleteMany({});
+    //   await tx.riskAssessment.deleteMany({});
 
-      await tx.duplicateCandidate.deleteMany({});
+    //   await tx.duplicateCandidate.deleteMany({});
 
-      if (riskAssessmentRows.length > 0) {
-        await tx.riskAssessment.createMany({
-          data: riskAssessmentRows,
-        });
-      }
+    //   if (riskAssessmentRows.length > 0) {
+    //     await tx.riskAssessment.createMany({
+    //       data: riskAssessmentRows,
+    //     });
+    //   }
 
-      if (riskSignalRows.length > 0) {
-        await tx.riskSignal.createMany({
-          data: riskSignalRows,
-        });
-      }
+    //   if (riskSignalRows.length > 0) {
+    //     await tx.riskSignal.createMany({
+    //       data: riskSignalRows,
+    //     });
+    //   }
 
-      if (finalDuplicateRows.length > 0) {
-        await tx.duplicateCandidate.createMany({
-          data: finalDuplicateRows,
-          skipDuplicates: true,
-        });
-      }
-    },
-    {
-      timeout: 60_000,
-    },
-  
-  );
+    //   if (finalDuplicateRows.length > 0) {
+    //     await tx.duplicateCandidate.createMany({
+    //       data: finalDuplicateRows,
+    //       skipDuplicates: true,
+    //     });
+    //   }
+    // },
+    // {
+    //   timeout: 60_000,
+    // },
+    //
+  //);
+  const BATCH_SIZE = 5000;
+
+// Clear previous ML outputs
+await prisma.riskSignal.deleteMany({});
+await prisma.riskAssessment.deleteMany({});
+await prisma.duplicateCandidate.deleteMany({});
+
+console.log("Writing risk assessments...");
+
+for (let i = 0; i < riskAssessmentRows.length; i += BATCH_SIZE) {
+  await prisma.riskAssessment.createMany({
+    data: riskAssessmentRows.slice(i, i + BATCH_SIZE),
+  });
+}
+
+console.log("Writing risk signals...");
+
+for (let i = 0; i < riskSignalRows.length; i += BATCH_SIZE) {
+  await prisma.riskSignal.createMany({
+    data: riskSignalRows.slice(i, i + BATCH_SIZE),
+  });
+}
+
+console.log("Writing duplicate candidates...");
+
+for (let i = 0; i < finalDuplicateRows.length; i += BATCH_SIZE) {
+  await prisma.duplicateCandidate.createMany({
+    data: finalDuplicateRows.slice(i, i + BATCH_SIZE),
+    skipDuplicates: true,
+  });
+
+  if ((i / BATCH_SIZE + 1) % 10 === 0) {
+    console.log(
+      `  ${Math.min(i + BATCH_SIZE, finalDuplicateRows.length)} / ${finalDuplicateRows.length}`,
+    );
+  }
+}
 
   return {
     projectsPersisted:

@@ -22,7 +22,8 @@
     "risk:consistency": "tsx scripts/run-consistency-detection.ts",
     "risk:assessment": "tsx scripts/run-risk-assessment.ts",
     "risk:ml": "tsx scripts/run-ml-pipeline.ts",
-"benford": "tsx scripts/run-benford.ts"  },
+    "benford": "tsx scripts/run-benford.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

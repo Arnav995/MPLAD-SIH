@@ -1,21 +1,18 @@
-// import "../src/config/env.js";
+import "../src/config/env.js";
 
-// import { EsakshiService } from "../src/ingestion/esakshi/esakshi.service.js";
+import { EsakshiService } from "../src/ingestion/esakshi/esakshi.service.js";
 
-// async function main() {
-//   const api = new EsakshiService();
+async function main() {
+  const api = new EsakshiService();
 
-//   const states = await api.fetchStates();
+  const states = await api.fetchStates();
 
-//   console.log(`Found ${states.length} States / UTs\n`);
+  console.log(`States found: ${states.length}`);
+  console.log("");
 
-//   console.table(
-//     states.map((s) => ({
-//       id: s.STATE_ID,
-//       state: s.STATE_NAME,
-//       combo: `${s.STATE_ID},0,0,2`,
-//     }))
-//   );
-// }
+  states.forEach((s) =>
+    console.log(`${s.STATE_ID} -> ${s.STATE_NAME}`)
+  );
+}
 
-// main().catch(console.error);
+main().catch(console.error);
